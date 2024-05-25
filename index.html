@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test your memory love</title>
+    <title>WTF Have we been?</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
     <style>
         body {
@@ -19,6 +19,10 @@
             flex-direction: column;
             align-items: center;
             padding: 10px;
+        }
+        #title {
+            font-size: 2em;
+            margin-bottom: 20px;
         }
         #photo {
             width: 100%;
@@ -38,9 +42,9 @@
             margin-bottom: 20px;
             border-radius: 10px;
         }
-        #info {
-            margin-top: 20px;
+        #info, #closest-guess {
             font-size: 1.2em;
+            margin-top: 20px;
         }
         button {
             padding: 10px 20px;
@@ -58,7 +62,7 @@
         .modal {
             display: none;
             position: fixed;
-            z-index: 1;
+            z-index: 1000;
             left: 0;
             top: 0;
             width: 100%;
@@ -82,10 +86,11 @@
 </head>
 <body>
     <div id="container">
-        <img id="photo" src="src/imageGuess.JPG" alt="I love you">
+        <div id="title">Where TF Have We Been?</div>
+        <img id="photo" alt="Photo">
         <div id="instructions">Let's see if you remember where this photo was taken, my love. <br> Pin your guess on the map below.</div>
         <div id="map"></div>
-        <div id="info">Click on the map to guess the location.</div>
+        <div id="closest-guess"></div>
     </div>
 
     <!-- Modal -->
@@ -97,49 +102,42 @@
     </div>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="locations.js"></script>
     <script>
         // Initialize the map
-        var map = L.map('map').setView([20, 0], 2);
+        var map = L.map('map').setView([-40.9006, 174.8860], 5); // New Zealand coordinates
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Define the hardcoded location
-        var targetLocation = [-40.893597, 174.979281];
+        // Get today's index
+        var todaysIndex = getTodaysIndex();
 
-        // Check if the user has already made a guess today
-        var lastGuessDate = localStorage.getItem('lastGuessDate');
-        var today = new Date().toISOString().split('T')[0];
+        // Set the target location
+        var targetLocation = locations[todaysIndex];
+
+        // Set the photo source
+        document.getElementById('photo').src = `src/imageGuess${todaysIndex}.JPG`;
 
         // Get the modal elements
         var modal = document.getElementById("myModal");
         var modalText = document.getElementById("modal-text");
         var shareButton = document.getElementById("shareButton");
 
-        // Close the modal when the user clicks anywhere outside of the modal content
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
+        // Retrieve closest guess from local storage
+        var closestGuess = localStorage.getItem('closestGuess');
+        var closestGuessDisplay = closestGuess ? `Closest Guess: ${closestGuess}` : "No guesses made yet.";
+        document.getElementById('closest-guess').innerHTML = closestGuessDisplay;
 
-        function createShareLink(distanceDisplay) {
-            var shareMessage = "My guess today was " + distanceDisplay + " precise!";
-            var shareUrl = "https://wa.me/?text=" + encodeURIComponent(shareMessage);
-            return shareUrl;
-        }
+        // Check if the user has already made a guess today
+        var lastGuessDate = localStorage.getItem('lastGuessDate');
+        var today = new Date().toISOString().split('T')[0];
+        var lastGuessDistance = localStorage.getItem('lastGuessDistance');
 
-        function showModal(distanceDisplay) {
-            modal.style.display = "block";
-            modalText.innerText = "Distance from the target: " + distanceDisplay;
-            shareButton.onclick = function() {
-                window.open(createShareLink(distanceDisplay), '_blank');
-            };
-        }
-
-        if (lastGuessDate === today) {
-            showModal("You have already made a guess today. Please come back tomorrow!");
+        // Display today's distance guess if already made
+        if (lastGuessDate === today && lastGuessDistance) {
+            showModal(`You have already made a guess today my love. \nYour distance from the photo was ${lastGuessDistance}. \nPlease come back tomorrow!`, lastGuessDistance);
         } else {
             map.on('click', function(e) {
                 if (lastGuessDate !== today) {
@@ -155,17 +153,49 @@
                         distanceDisplay = distance.toFixed(2) + " meters";
                     }
 
+                    // Save today's distance guess
+                    localStorage.setItem('lastGuessDistance', distanceDisplay);
+
+                    // Check if this is the closest guess
+                    if (!closestGuess || distance < parseFloat(closestGuess)) {
+                        localStorage.setItem('closestGuess', distanceDisplay);
+                        closestGuess = distanceDisplay;
+                    }
+
+                    // Update closest guess display
+                    document.getElementById('closest-guess').innerHTML = `Your closest Guess: ${closestGuess}`;
+
                     L.marker(clickedLocation).addTo(map)
-                        .bindPopup("Your guess: " + clickedLocation.toString() + "<br>Distance: " + distanceDisplay)
+                        .bindPopup("Your distance from the photo was: " + distanceDisplay)
                         .openPopup();
 
-                    document.getElementById('info').innerHTML = "Distance from the target: " + distanceDisplay;
-                    showModal(distanceDisplay);
+                    showModal(`Your distance today was: ${distanceDisplay}!`, distanceDisplay);
                 } else {
-                    showModal("You have already made a guess today. Please come back tomorrow!");
+                    showModal(`You have already made a guess today my love. \nDistance: ${lastGuessDistance}. \nPlease come back tomorrow!`, lastGuessDistance);
                 }
             });
         }
+
+        function createShareLink(distanceDisplay) {
+            var shareMessage = "My guess today was " + distanceDisplay + " precise!";
+            var shareUrl = "https://wa.me/?text=" + encodeURIComponent(shareMessage);
+            return shareUrl;
+        }
+
+        function showModal(message, distanceDisplay) {
+            modal.style.display = "block";
+            modalText.innerText = message;
+            shareButton.onclick = function() {
+                window.open(createShareLink(distanceDisplay), '_blank');
+            };
+        }
+
+        // Close the modal when the user clicks anywhere outside of the modal content
+/*         window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        } */
     </script>
 </body>
 </html>
