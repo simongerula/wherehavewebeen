@@ -5,8 +5,12 @@ const locations = [
 
 function getTodaysIndex() {
     const startDate = new Date("2024-05-25"); // Starting date
+    console.log(startDate)
     const today = new Date();
+    console.log(today)
     const diffTime = Math.abs(today - startDate);
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays % locations.length;
+    console.log(diffTime)
+    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+    console.log(diffDays)
+    return diffDays;
 }
