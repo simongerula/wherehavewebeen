@@ -91,6 +91,7 @@
         <div id="instructions">Let's see if you remember where this photo was taken, my love. <br> Pin your guess on the map below.</div>
         <div id="map"></div>
         <div id="closest-guess"></div>
+        <div id="info">I love you forever ❤️</div>
     </div>
 
     <!-- Modal -->
@@ -127,7 +128,7 @@
 
         // Retrieve closest guess from local storage
         var closestGuess = localStorage.getItem('closestGuess');
-        var closestGuessDisplay = closestGuess ? `Closest Guess: ${closestGuess}` : "No guesses made yet.";
+        var closestGuessDisplay = closestGuess ? `Closest Guess: ${closestGuess}` : "";
         document.getElementById('closest-guess').innerHTML = closestGuessDisplay;
 
         // Check if the user has already made a guess today

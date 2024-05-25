@@ -1,8 +1,6 @@
 const locations = [
-    [48.8584, 2.2945], // Eiffel Tower, Paris
-    [40.6892, -74.0445], // Statue of Liberty, New York
-    [-33.8568, 151.2153], // Sydney Opera House, Sydney
-    // Add more locations as needed
+    [-40.893762, 174.978244], 
+    [-40.785002, 175.151378], 
 ];
 
 function getTodaysIndex() {
