@@ -172,9 +172,22 @@
                     // Update closest guess display
                     document.getElementById('closest-guess').innerHTML = `Your closest Guess: ${closestGuess}`;
 
+                    // Draw a line between clicked location and target location
+                    L.polyline([clickedLocation, targetLocation], {color: 'red'}).addTo(map);
+
                     L.marker(clickedLocation).addTo(map)
                         .bindPopup("Your distance from the photo was: " + distanceDisplay)
                         .openPopup();
+
+                    // Define the camera icon
+                    var cameraIcon = L.icon({
+                        iconUrl: 'src/cameraIcon.png', // Replace with the path to your camera icon
+                        iconSize: [32, 32], // Adjust the size as needed
+                        iconAnchor: [16, 32], // Adjust the anchor point as needed
+                        popupAnchor: [0, -32] // Adjust the popup anchor point as needed
+                    });
+                    // Add a marker with the camera icon at the target location
+                    L.marker(targetLocation, {icon: cameraIcon}).addTo(map);
 
                     showModal(`Your distance today was: ${distanceDisplay}!`, distanceDisplay);
                 }
@@ -196,11 +209,11 @@
         }
 
         // Close the modal when the user clicks anywhere outside of the modal content
-/*         window.onclick = function(event) {
+        window.onclick = function(event) {
             if (event.target == modal) {
                 modal.style.display = "none";
             }
-        } */
+        }
     </script>
 </body>
 </html>
