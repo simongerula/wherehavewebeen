@@ -138,12 +138,34 @@
         var month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
         var day = String(today.getDate()).padStart(2, '0');
         today = `${year}-${month}-${day}`;
-        console.log(today);
+
         var lastGuessDistance = localStorage.getItem('lastGuessDistance');
 
-        // Display today's distance guess if already made
-        console.log(lastGuessDate)
         if (lastGuessDate === today) {
+            // Show the map with previous guess and target location
+            var lastGuessLatLng = JSON.parse(localStorage.getItem('lastGuessLatLng'));
+
+            if (lastGuessLatLng) {
+                var clickedLocation = L.latLng(lastGuessLatLng.lat, lastGuessLatLng.lng);
+
+                L.polyline([clickedLocation, targetLocation], {color: 'red'}).addTo(map);
+
+                L.marker(clickedLocation).addTo(map)
+                    .bindPopup("Your distance from the photo was: " + lastGuessDistance)
+                    .openPopup();
+
+                // Define the camera icon
+                var cameraIcon = L.icon({
+                    iconUrl: 'src/cameraIcon.png', // Replace with the path to your camera icon
+                    iconSize: [32, 32], // Adjust the size as needed
+                    iconAnchor: [16, 32], // Adjust the anchor point as needed
+                    popupAnchor: [0, -32] // Adjust the popup anchor point as needed
+                });
+
+                // Add a marker with the camera icon at the target location
+                L.marker(targetLocation, {icon: cameraIcon}).addTo(map);
+            }
+
             showModal(`You have already made a guess today my love. \nYour distance from the photo was ${lastGuessDistance}. \nPlease come back tomorrow!`, lastGuessDistance);
         } else {
             map.on('click', function(e) {
@@ -162,6 +184,7 @@
 
                     // Save today's distance guess
                     localStorage.setItem('lastGuessDistance', distanceDisplay);
+                    localStorage.setItem('lastGuessLatLng', JSON.stringify(clickedLocation));
 
                     // Check if this is the closest guess
                     if (!closestGuess || distance < parseFloat(closestGuess)) {
@@ -186,6 +209,7 @@
                         iconAnchor: [16, 32], // Adjust the anchor point as needed
                         popupAnchor: [0, -32] // Adjust the popup anchor point as needed
                     });
+
                     // Add a marker with the camera icon at the target location
                     L.marker(targetLocation, {icon: cameraIcon}).addTo(map);
 
