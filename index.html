@@ -82,13 +82,25 @@
             text-align: center;
             border-radius: 10px;
         }
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <div id="container">
         <div id="title">Where Have We Been?</div>
         <img id="photo" alt="Photo">
-        <div id="instructions">Hi Love, <br> Let's see if you remember where this photo was taken, my love. <br> Pin your guess on the map below.</div>
+        <div id="instructions">Let's see if you remember where this photo was taken, my love. <br> Pin your guess on the map below.</div>
         <div id="map"></div>
         <div id="closest-guess"></div>
         <div id="info">I love you forever ❤️</div>
@@ -97,8 +109,8 @@
     <!-- Modal -->
     <div id="myModal" class="modal">
         <div class="modal-content">
-            <p id="modal-text"></p>
-            <button id="shareButton">Share</button>
+            <span class="close">&times;</span>
+            <p>Hi Love, have a beautiful day. I love you <br> 88 Days together ❤️🥹</p>
         </div>
     </div>
 
@@ -120,11 +132,6 @@
 
         // Set the photo source
         document.getElementById('photo').src = `src/imageGuess${todaysIndex}.JPG`;
-
-        // Get the modal elements
-        var modal = document.getElementById("myModal");
-        var modalText = document.getElementById("modal-text");
-        var shareButton = document.getElementById("shareButton");
 
         // Retrieve closest guess from local storage
         var closestGuess = localStorage.getItem('closestGuess');
@@ -151,8 +158,10 @@
                 L.polyline([clickedLocation, targetLocation], {color: 'red'}).addTo(map);
 
                 L.marker(clickedLocation).addTo(map)
-                    .bindPopup("Your distance from the photo was: " + lastGuessDistance)
-                    .openPopup();
+                    .bindPopup(`
+                        Your distance from the photo was: ${lastGuessDistance}<br>
+                        <button onclick="window.open('${createShareLink(lastGuessDistance)}', '_blank')">Share</button>
+                    `).openPopup();
 
                 // Define the camera icon
                 var cameraIcon = L.icon({
@@ -165,8 +174,6 @@
                 // Add a marker with the camera icon at the target location
                 L.marker(targetLocation, {icon: cameraIcon}).addTo(map);
             }
-
-            showModal(`You have already made a guess today my love. \nYour distance from the photo was ${lastGuessDistance}. \nPlease come back tomorrow!`, lastGuessDistance);
         } else {
             map.on('click', function(e) {
                 if (lastGuessDate !== today) {
@@ -199,8 +206,10 @@
                     L.polyline([clickedLocation, targetLocation], {color: 'red'}).addTo(map);
 
                     L.marker(clickedLocation).addTo(map)
-                        .bindPopup("Your distance from the photo was: " + distanceDisplay)
-                        .openPopup();
+                        .bindPopup(`
+                            Your distance from the photo was: ${distanceDisplay}<br>
+                            <button onclick="window.open('${createShareLink(distanceDisplay)}', '_blank')">Share</button>
+                        `).openPopup();
 
                     // Define the camera icon
                     var cameraIcon = L.icon({
@@ -212,8 +221,6 @@
 
                     // Add a marker with the camera icon at the target location
                     L.marker(targetLocation, {icon: cameraIcon}).addTo(map);
-
-                    showModal(`Your distance today was: ${distanceDisplay}!`, distanceDisplay);
                 }
             });
         }
@@ -224,12 +231,18 @@
             return shareUrl;
         }
 
-        function showModal(message, distanceDisplay) {
+        // Get the modal elements
+        var modal = document.getElementById("myModal");
+        var span = document.getElementsByClassName("close")[0];
+
+        // Show the modal when the user visits the page
+        window.onload = function() {
             modal.style.display = "block";
-            modalText.innerText = message;
-            shareButton.onclick = function() {
-                window.open(createShareLink(distanceDisplay), '_blank');
-            };
+        }
+
+        // Close the modal when the user clicks on <span> (x)
+        span.onclick = function() {
+            modal.style.display = "none";
         }
 
         // Close the modal when the user clicks anywhere outside of the modal content
