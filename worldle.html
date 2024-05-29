@@ -123,7 +123,7 @@
         </div>
     </div>
 
-    <div>Sorry love, only three guesses 😜 <br> Are words related to us. And sorry no yellow letters yet 👨🏼‍🔬</div>
+    <div>Sorry love, only three guesses 😜 <br> Are words related to us. And sorry no yellow letters yet 👨🏼‍🔬. <br> If the position is ok will be green.</div>
 
     <div id="keyboard">
         <button onclick="insertLetter('Q')">Q</button>
@@ -242,7 +242,7 @@
             const guessedWordStr = guessedWord.join('');
             if (guessedWordStr === correctWord) {
                 // Correct word guessed
-                resultElement.textContent = `Congratulations! You guessed the word "niche" correctly!`;
+                resultElement.textContent = `You are AMAAAAZING love 😍`;
                 resultElement.style.color = 'green';
                 guessedWord.forEach((letter, index) => {
                     const input = document.getElementById(`guess-${index}-${guessesContainer.children.length - 1}`);
@@ -260,7 +260,7 @@
                 resultElement.textContent = `Wrong guess. You have ${--tries} tries left.`;
                 resultElement.style.color = 'red';
                 if (tries <= 0) {
-                    resultElement.textContent = `Sorry, you've run out of tries. The correct word was "niche".`;
+                    resultElement.textContent = `Hey Love! You ran out of tries! The word was ${correctWord}`;
                 } else {
                     // Create a new row for the next guess
                     createGuessRow();
