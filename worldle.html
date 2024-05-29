@@ -48,6 +48,11 @@
 
         #keyboard {
             margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 300px;
+            margin: 20px auto;
         }
 
         #keyboard button {
@@ -156,6 +161,7 @@
 
     <div class="bottomText">I love you forever <a style="text-decoration:none" href="https://open.spotify.com/track/6BEP2k75mE8u8gHdvxV3mn?si=34b3a4493d944e6e">❤️</a></div>
     <div class="bottomText">Counting the days to see you <a style="text-decoration:none" href="/wherehavewebeen/countdown.html">🗓️</a></div>
+    <div class="bottomText"><a style="text-decoration:none" href="/wherehavewebeen/countdown.html">Back to main page 🏃🏼‍♀️</a></div>
 
     <script>
         // Define the correct word
@@ -163,12 +169,26 @@
         // Initialize the guessed word
         let guessedWord = ["_", "_", "_", "_", "_"];
         // Initialize the number of tries
-        let tries = 5;
-    
+        let tries = 3;
+
+        // Check if there is any progress saved in local storage
+        const savedGuessedWord = localStorage.getItem('guessedWord');
+        const savedTries = localStorage.getItem('tries');
+        if (savedGuessedWord && savedTries) {
+            guessedWord = JSON.parse(savedGuessedWord);
+            tries = parseInt(savedTries);
+        }
+
+        // Function to save the current progress in local storage
+        function saveProgress() {
+            localStorage.setItem('guessedWord', JSON.stringify(guessedWord));
+            localStorage.setItem('tries', tries.toString());
+        }
+
         // Get the guesses container and result element
         const guessesContainer = document.getElementById('guesses-container');
         const resultElement = document.getElementById('result');
-    
+
         // Function to create a new row of guess inputs
         function createGuessRow() {
             const newRow = document.createElement('div');
@@ -183,11 +203,11 @@
                 newRow.appendChild(input);
             }
             guessesContainer.appendChild(newRow);
-    
+
             // Focus on the first input
             newRow.children[0].focus();
         }
-    
+
         // Function to update the guessed word
         function updateGuessedWord() {
             guessedWord.forEach((letter, index) => {
@@ -196,7 +216,7 @@
                 input.style.backgroundColor = '#333333'; // Reset background color
             });
         }
-    
+
         // Function to insert a letter into the inputs
         function insertLetter(letter) {
             for (let i = 0; i < guessedWord.length; i++) {
@@ -207,13 +227,13 @@
                 }
             }
         }
-    
+
         // Function to reset the current line
         function resetLine() {
             guessedWord = ["_", "_", "_", "_", "_"];
             updateGuessedWord();
         }
-    
+
         // Function to submit the guess
         function submitGuess() {
             if (tries <= 0) return; // No more tries left
@@ -222,6 +242,10 @@
                 // Correct word guessed
                 resultElement.textContent = `Congratulations! You guessed the word "niche" correctly!`;
                 resultElement.style.color = 'green';
+                guessedWord.forEach((letter, index) => {
+                    const input = document.getElementById(`guess-${index}-${guessesContainer.children.length - 1}`);
+                    input.style.backgroundColor = 'green';
+                });
             } else {
                 // Update the background color of each letter after submitting the guess
                 guessedWord.forEach((letter, index) => {
@@ -241,7 +265,12 @@
                     resetLine(); // Reset the current line
                 }
             }
+        // Save progress after each guess
+        saveProgress();
         }
+
+        // Load the initial progress
+        updateGuessedWord();
     </script>
 </body>
 </html>
