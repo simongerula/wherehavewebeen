@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const showMessage = (msg, finalAttempt) => {
         clearTimeout(messageTimeout);
         messageContainer.textContent = msg;
-    
+
         if(finalAttempt){
             // Create a Share button
             const shareButton = document.createElement('button.key');
@@ -23,18 +23,18 @@ document.addEventListener('DOMContentLoaded', () => {
             shareButton.addEventListener('click', () => {
                 shareOnWhatsApp();
             });
-        
+
             // Append the Share button to the message container
             messageContainer.appendChild(shareButton);
         }
-    
+
         messageContainer.style.opacity = 1;
     };
-    
+
     const shareOnWhatsApp = () => {
         // Calculate correct and incorrect icons for the current attempt
         const correctIcons = currentAttempt.map((char, index) => char === correctWord[index] ? '🟩' : '⬛️').join('');
-        
+
         // Prepare the message to be shared on WhatsApp
         let shareMessage = `Today's worldle ${attempts.length}/${maxTries}\n`;
         attempts.forEach((attempt) => {
@@ -42,17 +42,17 @@ document.addEventListener('DOMContentLoaded', () => {
             shareMessage += `${attemptIcons}\n`;
         });
         shareMessage += `${correctIcons}`;
-    
+
         // Encode the message for WhatsApp URL
         const encodedMessage = encodeURIComponent(shareMessage);
-    
+
         // Construct the WhatsApp share URL
         const shareURL = `https://wa.me/?text=${encodedMessage}`;
-    
+
         // Open the WhatsApp share URL in a new tab
         window.open(shareURL, '_blank');
     };
-    
+
 
     const initializeBoard = () => {
         gameBoard.innerHTML = '';
@@ -131,6 +131,33 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    const clearAttemptsIfYesterday = () => {
+        const lastAttemptDate = localStorage.getItem('lastAttemptDate');
+        const today = new Date();
+        const yesterday = new Date(today);
+        yesterday.setDate(today.getDate() - 1);
+
+        //remove after 01/06/2024
+        if(!lastAttemptDate){
+            localStorage.removeItem('attempts');
+            attempts = [];
+            saveAttempts();
+        }
+        //
+        if (lastAttemptDate) {
+            const lastAttemptDateTime = new Date(lastAttemptDate);
+            if (lastAttemptDateTime.getDate() === yesterday.getDate() &&
+                lastAttemptDateTime.getMonth() === yesterday.getMonth() &&
+                lastAttemptDateTime.getFullYear() === yesterday.getFullYear()) {
+                localStorage.removeItem('attempts');
+                attempts = [];
+                saveAttempts();
+            }
+        }
+
+        localStorage.setItem('lastAttemptDate', today);
+    };
+
     keys.forEach(key => {
         key.addEventListener('click', () => handleKeyPress(key.textContent));
     });
@@ -140,4 +167,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initializeBoard();
     updateBoard();
+    clearAttemptsIfYesterday();
 });
