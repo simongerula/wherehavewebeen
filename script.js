@@ -12,13 +12,44 @@ document.addEventListener('DOMContentLoaded', () => {
     const keys = document.querySelectorAll('.key');
     const messageContainer = document.getElementById('message-container');
 
-    const showMessage = (msg) => {
+    const showMessage = (msg, final) => {
         clearTimeout(messageTimeout);
         messageContainer.textContent = msg;
+
+        if(final){
+        // Create a Share button
+        const shareButton = document.createElement('button.key');
+        shareButton.textContent = ' Share';
+        shareButton.addEventListener('click', () => {
+            shareOnWhatsApp();
+        });
+    
+        // Append the Share button to the message container
+        messageContainer.appendChild(shareButton);
+        }
+    
         messageContainer.style.opacity = 1;
         messageTimeout = setTimeout(() => {
             messageContainer.style.opacity = 0;
         }, 3000);
+    };
+    
+    const shareOnWhatsApp = () => {
+        // Calculate correct and incorrect icons for the current attempt
+        const correctIcons = currentAttempt.map((char, index) => char === correctWord[index] ? '🟩' : '⬛️').join('');
+        
+        // Prepare the message to be shared on WhatsApp
+        let shareMessage = `Today's worldle ${attempts.length}/${maxTries}\n`;
+        shareMessage += `${correctIcons}`;
+    
+        // Encode the message for WhatsApp URL
+        const encodedMessage = encodeURIComponent(shareMessage);
+    
+        // Construct the WhatsApp share URL
+        const shareURL = `https://wa.me/?text=${encodedMessage}`;
+    
+        // Open the WhatsApp share URL in a new tab
+        window.open(shareURL, '_blank');
     };
 
     const initializeBoard = () => {
@@ -61,11 +92,11 @@ document.addEventListener('DOMContentLoaded', () => {
             saveAttempts();
 
             if (result.every(r => r === 'correct')) {
-                showMessage('Well done love! You are AMAAAZING❤️');
+                showMessage('Well done love! You are AMAAAZING❤️', true);
             } else if (attempts.length >= maxTries) {
-                showMessage(`Hey Love! The word was ${correctWord}`);
+                showMessage(`Hey Love! The word was ${correctWord}`, true);
             } else {
-                showMessage(`Wrong one love, Let's go! You have ${maxTries - attempts.length} tries left.`);
+                showMessage(`Wrong one love, Let's go! You have ${maxTries - attempts.length} tries left.`, false);
             }
 
             currentAttempt = [];
