@@ -12,26 +12,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const keys = document.querySelectorAll('.key');
     const messageContainer = document.getElementById('message-container');
 
-    const showMessage = (msg, final) => {
+    const showMessage = (msg, finalAttempt) => {
         clearTimeout(messageTimeout);
         messageContainer.textContent = msg;
-
-        if(final){
-        // Create a Share button
-        const shareButton = document.createElement('button.key');
-        shareButton.textContent = ' Share';
-        shareButton.addEventListener('click', () => {
-            shareOnWhatsApp();
-        });
     
-        // Append the Share button to the message container
-        messageContainer.appendChild(shareButton);
+        if(finalAttempt){
+            // Create a Share button
+            const shareButton = document.createElement('button.key');
+            shareButton.textContent = ' Share';
+            shareButton.addEventListener('click', () => {
+                shareOnWhatsApp();
+            });
+        
+            // Append the Share button to the message container
+            messageContainer.appendChild(shareButton);
         }
     
         messageContainer.style.opacity = 1;
-        messageTimeout = setTimeout(() => {
-            messageContainer.style.opacity = 0;
-        }, 3000);
     };
     
     const shareOnWhatsApp = () => {
@@ -40,6 +37,10 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Prepare the message to be shared on WhatsApp
         let shareMessage = `Today's worldle ${attempts.length}/${maxTries}\n`;
+        attempts.forEach((attempt) => {
+            const attemptIcons = attempt.result.map((result) => result === 'correct' ? '🟩' : '⬛️').join('');
+            shareMessage += `${attemptIcons}\n`;
+        });
         shareMessage += `${correctIcons}`;
     
         // Encode the message for WhatsApp URL
@@ -51,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Open the WhatsApp share URL in a new tab
         window.open(shareURL, '_blank');
     };
+    
 
     const initializeBoard = () => {
         gameBoard.innerHTML = '';
