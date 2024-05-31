@@ -35,11 +35,11 @@ body {
     border: 1px solid #444;
     display: flex;
     justify-content: center;
-    align-items: center; /* Ensure the items are centered vertically */
+    /*align-items: center;*/
     font-size: 1.5em;
     text-transform: uppercase;
     box-sizing: border-box;
-    line-height: 1; /* Adjust line height to ensure text is vertically centered */
+    line-height: 3.5;
 }
 
 .green {
