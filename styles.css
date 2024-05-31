@@ -103,15 +103,16 @@ hr {
 }
 
 .sharebutton {
-    background-color: #31b74e;
+    background-color: #444;
     color: #fff;
     border: solid;
-    padding: 8px;
+    padding: 6px;
     font-size: 0.8em;
     cursor: pointer;
     flex: 1;
-    max-width: none;
+    width: 100%;
     box-sizing: border-box;
+    margin-top: 10px;
 }
 
 @media (min-width: 600px) {
