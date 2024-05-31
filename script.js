@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if(finalAttempt){
             // Create a Share button
-            const shareButton = document.createElement('button.key');
+            const shareButton = document.createElement('p');
             shareButton.textContent = ' Share';
             shareButton.addEventListener('click', () => {
                 shareOnWhatsApp();
@@ -33,12 +33,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const shareOnWhatsApp = () => {
         // Calculate correct and incorrect icons for the current attempt
-        const correctIcons = currentAttempt.map((char, index) => char === correctWord[index] ? '🟩' : '⬛️').join('');
+        const correctIcons = currentAttempt.map((char, index) => char === correctWord[index] ? '🟩' : '⬜️').join('');
 
         // Prepare the message to be shared on WhatsApp
         let shareMessage = `Today's worldle ${attempts.length}/${maxTries}\n`;
         attempts.forEach((attempt) => {
-            const attemptIcons = attempt.result.map((result) => result === 'correct' ? '🟩' : '⬛️').join('');
+            const attemptIcons = attempt.result.map((result) => result === 'correct' ? '🟩' : '⬜️').join('');
             shareMessage += `${attemptIcons}\n`;
         });
         shareMessage += `${correctIcons}`;
