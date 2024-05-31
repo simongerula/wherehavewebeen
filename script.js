@@ -15,30 +15,42 @@ document.addEventListener('DOMContentLoaded', () => {
     const showMessage = (msg, finalAttempt) => {
         clearTimeout(messageTimeout);
         messageContainer.textContent = msg;
-
-        if(finalAttempt){
+    
+        if (finalAttempt) {
             // Create a Share button
-            const shareButton = document.createElement('button.key');
-            shareButton.textContent = ' Share';
+            const shareButton = document.createElement('button');
+            shareButton.textContent = 'Share';
+            shareButton.classList.add('sharebutton');
             shareButton.addEventListener('click', () => {
                 shareOnWhatsApp();
             });
-
+    
             // Append the Share button to the message container
             messageContainer.appendChild(shareButton);
+    
+            // Save the final message state to localStorage
+            localStorage.setItem('finalMessage', JSON.stringify({ msg, finalAttempt: true }));
         }
-
+    
         messageContainer.style.opacity = 1;
     };
 
+    const loadFinalMessage = () => {
+        const savedMessage = localStorage.getItem('finalMessage');
+        if (savedMessage) {
+            const { msg, finalAttempt } = JSON.parse(savedMessage);
+            showMessage(msg, finalAttempt);
+        }
+    };    
+
     const shareOnWhatsApp = () => {
         // Calculate correct and incorrect icons for the current attempt
-        const correctIcons = currentAttempt.map((char, index) => char === correctWord[index] ? '🟩' : '⬛️').join('');
+        const correctIcons = currentAttempt.map((char, index) => char === correctWord[index] ? '🟩' : '⬜️').join('');
 
         // Prepare the message to be shared on WhatsApp
         let shareMessage = `Today's worldle ${attempts.length}/${maxTries}\n`;
         attempts.forEach((attempt) => {
-            const attemptIcons = attempt.result.map((result) => result === 'correct' ? '🟩' : '⬛️').join('');
+            const attemptIcons = attempt.result.map((result) => result === 'correct' ? '🟩' : '⬜️').join('');
             shareMessage += `${attemptIcons}\n`;
         });
         shareMessage += `${correctIcons}`;
@@ -168,4 +180,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeBoard();
     updateBoard();
     clearAttemptsIfYesterday();
+    loadFinalMessage();
 });
