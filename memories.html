@@ -87,14 +87,9 @@
             'Watching series or movies together',
             'Waking up next to you (You look beautiful)',
             'Getting breakfast together on weekends or when working from home',
-            'Loading...'
         ]
-        !memoryIndex || memoryIndex == 26 ? memoryIndex = 0 : memoryIndex = memoryIndex;
-        if(memoryIndex == 25){
-            document.querySelector('img').setAttribute('src',`drawings/memory${memoryIndex}.gif`);
-        } else {
-            document.querySelector('img').setAttribute('src',`drawings/memory${memoryIndex}.jpg`);
-        }
+        !memoryIndex || memoryIndex == 25 ? memoryIndex = 0 : memoryIndex = memoryIndex;
+        document.querySelector('img').setAttribute('src',`drawings/memory${memoryIndex}.jpg`);
         document.querySelector('.memory.story').textContent = memoryText[memoryIndex];
         memoryIndex ++;
         localStorage.setItem('memoryIndex', memoryIndex);
