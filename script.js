@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const correctWord = 'BOMBS';
+    const correctWord = 'SHARE';
     const maxTries = 3;
     let currentAttempt = [];
     let attempts = JSON.parse(localStorage.getItem('attempts')) || [];
