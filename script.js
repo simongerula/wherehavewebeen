@@ -45,12 +45,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const shareOnWhatsApp = () => {
         // Calculate correct and incorrect icons for the current attempt
-        const correctIcons = currentAttempt.map((char, index) => char === correctWord[index] ? '🟩' : '⬜️').join('');
+        const correctIcons = currentAttempt.map((char, index) => char === correctWord[index] ? '🟩' : (correctWord.includes(char) ? '🟨' : '⬜️')).join('');
 
         // Prepare the message to be shared on WhatsApp
-        let shareMessage = `Today's worldle ${attempts.length}/${maxTries}\n`;
+        let shareMessage = `Today's wordle ${attempts.length}/${maxTries}\n`;
         attempts.forEach((attempt) => {
-            const attemptIcons = attempt.result.map((result) => result === 'correct' ? '🟩' : '⬜️').join('');
+            const attemptIcons = attempt.result.map((result) => result === 'correct' ? '🟩' : (result === 'present' ? '🟨' : '⬜️')).join('');
             shareMessage += `${attemptIcons}\n`;
         });
         shareMessage += `${correctIcons}`;
@@ -64,7 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // Open the WhatsApp share URL in a new tab
         window.open(shareURL, '_blank');
     };
-
 
     const initializeBoard = () => {
         gameBoard.innerHTML = '';
@@ -82,6 +81,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 tile.textContent = attempt.word[i];
                 if (attempt.result[i] === 'correct') {
                     tile.classList.add('green');
+                } else if (attempt.result[i] === 'present') {
+                    tile.classList.add('yellow');
                 }
             }
         });
@@ -101,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const handleSubmit = () => {
         if (currentAttempt.length === 5 && attempts.length < maxTries) {
-            const result = currentAttempt.map((char, index) => char === correctWord[index] ? 'correct' : 'incorrect');
+            const result = currentAttempt.map((char, index) => char === correctWord[index] ? 'correct' : (correctWord.includes(char) ? 'present' : 'incorrect'));
             attempts.push({ word: currentAttempt.join(''), result });
             saveAttempts();
 
@@ -131,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < 15; i++) {
             const tile = gameBoard.children[i];
             tile.textContent = '';
-            tile.classList.remove('green');
+            tile.classList.remove('green', 'yellow');
         }
 
         loadAttempts();
