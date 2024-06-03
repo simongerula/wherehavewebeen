@@ -45,6 +45,10 @@ body {
     background-color: green;
 }
 
+.yellow {
+    background-color: orange;
+}
+
 #keyboard {
     display: flex;
     flex-direction: column;
