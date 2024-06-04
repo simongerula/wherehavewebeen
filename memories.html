@@ -1,52 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<style>
-
-
-    body {
-    background-color: black;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    color: white;
-    font-family: 'Handlee', cursive;
-    }
-
-    .container {
-        text-align: center;
-        width: 100%;
-    }
-
-    .container img {
-        width: 100%;
-        max-width: 100%;
-    }
-
-    p.memory {
-        font-family: 'Handlee', cursive;
-        font-size: 1.5rem;
-        margin: 20px 0 0 0;
-    }
-
-    p.footer {
-    margin: 20px 0;
-    font-size: 0.9em;
-    color: #fff;
-    }
-
-    .container hr {
-        border: 1px solid white;
-        width: 80%;
-        margin: 20px auto;
-    }
-</style>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image and Handwriting Font</title>
     <link href="https://fonts.googleapis.com/css2?family=Handlee&display=swap" rel="stylesheet">
+    <link href="css/memories.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -59,45 +18,6 @@
         <p class="footer">Counting the days to see you <a style="text-decoration:none" href="/wherehavewebeen/countdown.html">🗓️</a></p>
         <p class="footer">Back to the main page <a style="text-decoration:none" href="/wherehavewebeen/">🗺️</a></p>
     </div>
-    <script>
-        let memoryIndex = localStorage.getItem('memoryIndex');
-        const memoryText = [
-            'Feeling you close',
-            'Sitting watching the sunset',
-            'Going for a walk',
-            'Riding bike',
-            'Cooking together',
-            'Watering the plants in Wanaka',
-            'Holding your Hand (Could do this all day)',
-            'Defusing Bombs! (Yes we are a great team)',
-            'Buying or creating deco for our room / HOME',
-            'Walking with you to the train',
-            'Playing tennis with you my love and your parents',
-            'Hiking in CastlePoint',
-            'Hugging you all the time',
-            'Enjoying life with you',
-            'Going to a park and just sitting. What is life?',
-            'Spotting planes, my favorite',
-            'Working from home. I miss you love',
-            'Just looking at you riding and holding your hand',
-            'You grabbing my hand in bed before falling asleep',
-            'Making a fire in the caravan',
-            'Doing groceries together',
-            'Lifting youuu',
-            'Watching series or movies together',
-            'Waking up next to you (You look beautiful)',
-            'Getting breakfast together on weekends or when working from home',
-            'LOADING...'
-        ]
-        !memoryIndex || memoryIndex == 26 ? memoryIndex = 0 : memoryIndex = memoryIndex;
-        if(memoryIndex == 25){
-            document.querySelector('img').setAttribute('src',`drawings/memory${memoryIndex}.gif`);
-        } else {
-            document.querySelector('img').setAttribute('src',`drawings/memory${memoryIndex}.jpg`);
-        }
-        document.querySelector('.memory.story').textContent = memoryText[memoryIndex];
-        memoryIndex ++;
-        localStorage.setItem('memoryIndex', memoryIndex);
-    </script>
+    <script src="js/memories.js"></script>
 </body>
 </html>
