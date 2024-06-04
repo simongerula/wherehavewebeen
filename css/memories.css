@@ -1,0 +1,38 @@
+body {
+background-color: black;
+margin: 0;
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100vh;
+color: white;
+font-family: 'Handlee', cursive;
+}
+
+.container {
+    text-align: center;
+    width: 100%;
+}
+
+.container img {
+    width: 100%;
+    max-width: 100%;
+}
+
+p.memory {
+    font-family: 'Handlee', cursive;
+    font-size: 1.5rem;
+    margin: 20px 0 0 0;
+}
+
+p.footer {
+margin: 20px 0;
+font-size: 0.9em;
+color: #fff;
+}
+
+.container hr {
+    border: 1px solid white;
+    width: 80%;
+    margin: 20px auto;
+}
