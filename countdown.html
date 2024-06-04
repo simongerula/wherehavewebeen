@@ -5,68 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Countdown to June 28th</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #121212;
-            color: #ffffff;
-            font-family: 'Roboto Mono', monospace;
-            margin: 0;
-        }
-        #title {
-            text-align: center;
-            font-size: 1.5em;
-            margin-bottom: 20px;
-        }
-        #countdown {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .time-box {
-            background-color: #333;
-            border-radius: 10px;
-            padding: 10px;
-            margin: 5px;
-            text-align: center;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        }
-        .time-box span {
-            display: block;
-            font-size: 2em;
-        }
-        .label {
-            font-size: 0.8em;
-            color: #ccc;
-        }
-        #info {
-            font-size: 1em;
-            margin-top: 20px;
-            text-align: center;
-        }
-        @media (max-width: 600px) {
-            #title {
-                font-size: 1.2em;
-            }
-            .time-box {
-                padding: 5px;
-            }
-            .time-box span {
-                font-size: 1.5em;
-            }
-            .label {
-                font-size: 0.7em;
-            }
-            #info {
-                font-size: 0.9em;
-            }
-        }
-    </style>
+    <link href="css/countdown.css" rel="stylesheet">
 </head>
 <body>
     <div id="title">Counting the days to see you love 🥺</div>
@@ -90,26 +29,6 @@
     </div>
     <div id="info">I love you forever ❤️</div>
     <div id="info">Back to the main page <a style="text-decoration:none" href="/wherehavewebeen/">🗺️</a></div>
-
-    <script>
-        function updateCountdown() {
-            const targetDate = new Date('June 28, 2024 00:00:00').getTime();
-            const now = new Date().getTime();
-            const difference = targetDate - now;
-
-            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-            document.getElementById('days').innerText = String(days).padStart(2, '0');
-            document.getElementById('hours').innerText = String(hours).padStart(2, '0');
-            document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
-            document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
-        }
-
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
-    </script>
+    <script src="js/countdown.js"></script>
 </body>
 </html>
