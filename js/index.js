@@ -40,7 +40,7 @@ if (lastGuessDate === today) {
             `).openPopup();
 
         var cameraIcon = L.icon({
-            iconUrl: '../src/cameraIcon.png',
+            iconUrl: './src/cameraIcon.png',
             iconSize: [32, 32],
             iconAnchor: [16, 32],
             popupAnchor: [0, -32]
@@ -84,7 +84,7 @@ if (lastGuessDate === today) {
                 `).openPopup();
 
             var cameraIcon = L.icon({
-                iconUrl: '../src/cameraIcon.png',
+                iconUrl: './src/cameraIcon.png',
                 iconSize: [32, 32],
                 iconAnchor: [16, 32],
                 popupAnchor: [0, -32]
