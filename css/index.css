@@ -42,17 +42,13 @@ body {
     font-size: 1.2em;
     margin-top: 10px;
 }
+
 button {
-    padding: 10px 20px;
-    font-size: 1em;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    font-size: 20px;
+    padding: auto;
 }
-button:hover {
-    background-color: #218838;
+input#password {
+    font-size: 20px;
 }
 /* Modal styling */
 .modal {
@@ -97,3 +93,59 @@ hr {
     width: 80%;
     margin: 15px 0;
 }
+
+/* SCRATCH AND WIN */
+.scratch-win {
+    position: relative;
+    padding: 1rem 2rem 2rem 2rem;
+    background: linear-gradient(#2b3432, #041119);
+    border: 0.2rem solid #ffdc73;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0.2rem 0.2rem 1rem 0 rgba(0, 0, 0, 0.3);
+    display: none;
+}
+  
+  .scratch-win__title {
+    width: 100%;
+    margin: 0 auto 1rem;
+    color: #ffdc73;
+    font-size: 2rem;
+    text-align: center;
+    text-transform: uppercase;
+  }
+  
+  .scratch-win__scratcher {
+    position: relative;
+    width: auto;
+    height:12.5rem;
+  }
+  
+  .scratch-win__background {
+    display: block;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    background-color: #000000;
+    text-transform: uppercase;
+    font-size: 1.5rem;
+  }
+  
+  .scratch-win__foreground,
+  .scratch-win__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  #canvas {
+    width: 100%;
+    height: 100%;
+  }
+
+  #errorMessage,
+  #errorMessage2 {
+    display: none;
+  }
