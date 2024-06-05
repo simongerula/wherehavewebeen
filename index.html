@@ -20,12 +20,29 @@
         <p class="footer">Counting the days to see you <a style="text-decoration:none" href="/wherehavewebeen/countdown.html">🗓️</a></p>
         <p class="footer">YOU ARE MY WORLDle <a style="text-decoration:none" href="/wherehavewebeen/worldle.html">🌎</a></p>
         <p class="footer">My little vault of memories <a style="text-decoration:none" href="/wherehavewebeen/memories.html">🧳</a></p>
+        <p class="footer">Our song <a style="text-decoration:none" href="/wherehavewebeen/oursong.html">🎶</a></p>
     </div>
 
     <div id="myModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <p>They say that the world was built for two<br>Only worth living if somebody is loving you.<br><a href="/wherehavewebeen/oursong.html">🥺</a></p>
+            <!--<p>They say that the world was built for two<br>Only worth living if somebody is loving you.<br><a href="/wherehavewebeen/oursong.html">🥺</a></p>-->
+            <!-- SCRATCH AND WIN -->
+                <div id="thisDiv">
+                    <p>Okay love for today's message you need a password</p>
+                    <input type="password" name="password" id="password" placeholder="First WORLDle...">
+                    <button id="passwordCheck">🔑</button>
+                    <p id="errorMessage">Nop 😒</p>
+                </div>
+
+                <div id="scratch-win" class="scratch-win">
+                    <div class="scratch-win__title">Scratch &amp; win</div>
+                    <div class="scratch-win__scratcher">
+                    <div class="scratch-win__background">Sophie<br>You have my heart forever, please take care of it ❤️<br>I love you always</div>
+                    <canvas id="canvas" class="scratch-win__foreground"></canvas>
+                    </div>
+                </div> 
+            <!-- SCRATCH AND WIN -->
         </div>
     </div>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>

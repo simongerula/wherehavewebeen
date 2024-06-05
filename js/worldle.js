@@ -150,13 +150,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const yesterday = new Date(today);
         yesterday.setDate(today.getDate() - 1);
 
-        //remove after 01/06/2024
         if(!lastAttemptDate){
             localStorage.removeItem('attempts');
             attempts = [];
             saveAttempts();
         }
-        //
         if (lastAttemptDate) {
             const lastAttemptDateTime = new Date(lastAttemptDate);
             if (lastAttemptDateTime.getDate() === yesterday.getDate() &&
