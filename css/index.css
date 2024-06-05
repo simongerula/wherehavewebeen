@@ -118,7 +118,7 @@ hr {
   .scratch-win__scratcher {
     position: relative;
     width: auto;
-    height: 13rem;
+    height:12.5rem;
   }
   
   .scratch-win__background {
@@ -145,6 +145,7 @@ hr {
     height: 100%;
   }
 
-  #errorMessage {
+  #errorMessage,
+  #errorMessage2 {
     display: none;
   }

@@ -127,14 +127,20 @@ const passwordCheckButton = document.getElementById('passwordCheck')
 const scratchAndWinDiv = document.getElementById('scratch-win')
 const thisDiv = document.getElementById('thisDiv')
 const errorMessage = document.getElementById('errorMessage')
+const errorMessage2 = document.getElementById('errorMessage2')
 
+let tries = 0;
 passwordCheckButton.onclick = function() {
-    if(passwordInput.value.toLowerCase() == 'niche'){
+    if(passwordInput.value.toLowerCase() == 'tarzan'){
         thisDiv.style.display = "none";
         errorMessage.display = "none";
         scratchAndWinDiv.style.display = "block";
+    } else if (tries >= 2){
+        errorMessage2.style.display = "block";
+        errorMessage.style.display = "none";
     } else {
         errorMessage.style.display = "block";
+        tries ++;
     }
 }
 
