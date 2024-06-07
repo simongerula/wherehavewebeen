@@ -315,7 +315,7 @@ let shuffledButtons = [];
 let correctOrder = [];
 let currentSequenceIndex = 0;
 let timer;
-const totalTime = 300; // 5 minutes in seconds
+const totalTime = 120;
 const maxTriesPerDay = 3;
 
 function shuffleArray(array) {
@@ -456,6 +456,9 @@ function checkTries() {
     if (triesData.tries >= maxTriesPerDay) {
         document.getElementById('retry-button').disabled = true;
         document.getElementById('status').innerText = 'Three bombs were dropped already, please no more today. Come back tomorrow.';
+        document.getElementById('bomb-image').style.display = 'block';
+        document.getElementById('bomb-image').style.width = '300px';
+        document.getElementById('bomb-image').style.height = '400px';
         disableButtonsAndHideTimer();
     }
 }
