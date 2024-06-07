@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bomb Game</title>
+    <title>Sophie's Bombs</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -80,7 +80,7 @@
     </style>
 </head>
 <body>
-    <h1>Bomb Game</h1>
+    <h1>Sophie's Bombs! ☢️</h1>
     <p id="status">Press the buttons in the correct sequence to defuse the bomb!</p>
     <div class="button-container" id="buttons">
         <!-- Buttons will be inserted here by JavaScript -->
@@ -94,10 +94,10 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Instructions</h2>
-            <p>Here are the three arrays of emojis:</p>
-            <p>Array 1: [💫,🏓,🌶️,🏡,🍱,✈️,❤️,🎨,🥝,☀️,🇳🇿,🏂,🇦🇷]</p>
-            <p>Array 2: [🏡,🍱,🇳🇿,🏖️,🐶,🌊,🇦🇷,🏂,☀️,💚,🥝,💫,🎾]</p>
-            <p>Array 3: [🌊,✈️,🇦🇷,🎨,🍱,🌶️,🐶,🇳🇿,🏖️,💚,🏓,❤️,🎾]</p>
+            <p>Find the set of emojies that contain all the buttons, and then press the buttons in same order as they appear in the set:</p>
+            <p>[💫,🏓,🌶️,🏡,🍱,✈️,❤️,🎨,🥝,☀️,🇳🇿,🏂,🇦🇷]</p>
+            <p>[🏡,🍱,🇳🇿,🏖️,🐶,🌊,🇦🇷,🏂,☀️,💚,🥝,💫,🎾]</p>
+            <p>[🌊,✈️,🇦🇷,🎨,🍱,🌶️,🐶,🇳🇿,🏖️,💚,🏓,❤️,🎾]</p>
         </div>
     </div>
 
@@ -109,6 +109,7 @@
         ];
         let selectedArray;
         let shuffledButtons = [];
+
         let currentSequenceIndex = 0;
         let timer;
         const totalTime = 300; // 5 minutes in seconds
@@ -133,17 +134,24 @@
                 button.addEventListener('click', handleButtonClick);
                 buttonsContainer.appendChild(button);
             });
+            correctOrder = selectedArray.filter(item => shuffledButtons.slice(0, 4).includes(item));
+
+
 
             localStorage.setItem('shuffledButtons', JSON.stringify(shuffledButtons.slice(0, 4)));
             localStorage.setItem('selectedArray', JSON.stringify(selectedArray));
+            localStorage.setItem('correctOrder', JSON.stringify(correctOrder));
         }
 
         function loadGameFromStorage() {
             const storedShuffledButtons = JSON.parse(localStorage.getItem('shuffledButtons'));
             const storedSelectedArray = JSON.parse(localStorage.getItem('selectedArray'));
-            if (storedShuffledButtons && storedSelectedArray) {
+            const storedCorrectOrder = JSON.parse(localStorage.getItem('correctOrder'));
+
+            if (storedShuffledButtons && storedSelectedArray && storedCorrectOrder) {
                 shuffledButtons = storedShuffledButtons;
                 selectedArray = storedSelectedArray;
+                correctOrder = storedCorrectOrder;
 
                 const buttonsContainer = document.getElementById('buttons');
                 buttonsContainer.innerHTML = '';
@@ -159,7 +167,9 @@
         }
 
         function handleButtonClick(event) {
-            if (event.target.innerText === selectedArray[currentSequenceIndex]) {
+            console.log('button -> ', event.target.innerText)
+            console.log('expected -> ', selectedArray[currentSequenceIndex])
+            if (event.target.innerText === correctOrder[currentSequenceIndex]) {
                 currentSequenceIndex++;
                 if (currentSequenceIndex === 4) {
                     document.getElementById('status').innerText = 'Bomb Defused!';
