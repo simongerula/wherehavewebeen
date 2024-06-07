@@ -38,6 +38,12 @@
             padding: 10px 20px;
             font-size: 16px;
         }
+        #share-button {
+            display: none;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
         #instructions-button {
             margin-top: 20px;
             padding: 10px 20px;
@@ -80,193 +86,448 @@
     </style>
 </head>
 <body>
-    <h1>Sophie's Bombs! ☢️</h1>
+    <h1>Oh No! Sophie's Bombs! ☢️</h1>
     <p id="status">Press the buttons in the correct sequence to defuse the bomb!</p>
+    <img id="bomb-image" src="src/bombImage.jpg" alt="" style="display: none;">
     <div class="button-container" id="buttons">
         <!-- Buttons will be inserted here by JavaScript -->
     </div>
     <p id="timer"></p>
     <button id="retry-button">Retry</button>
     <button id="instructions-button">Instructions</button>
+    <button id="share-button">Share</button>
     
     <!-- Instructions Modal -->
     <div id="instructionsModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Instructions</h2>
-            <p>Find the set of emojies that contain all the buttons, and then press the buttons in same order as they appear in the set:</p>
+            <p>Please! Help me! Sophie is about to drop a BOMB!</p>
+            <p>Find the set of emojies that contain all the buttons, then press the buttons in same order as they appear in the set:</p>
             <p>[💫,🏓,🌶️,🏡,🍱,✈️,❤️,🎨,🥝,☀️,🇳🇿,🏂,🇦🇷]</p>
             <p>[🏡,🍱,🇳🇿,🏖️,🐶,🌊,🇦🇷,🏂,☀️,💚,🥝,💫,🎾]</p>
             <p>[🌊,✈️,🇦🇷,🎨,🍱,🌶️,🐶,🇳🇿,🏖️,💚,🏓,❤️,🎾]</p>
+            <p>Or smell the consequenses.</p>
         </div>
     </div>
 
     <script>
-        const emojiArrays = [
-            ["💫","🏓","🌶️","🏡","🍱","✈️","❤️","🎨","🥝","☀️","🇳🇿","🏂","🇦🇷"],
-            ["🏡","🍱","🇳🇿","🏖️","🐶","🌊","🇦🇷","🏂","☀️","💚","🥝","💫","🎾"],
-            ["🌊","✈️","🇦🇷","🎨","🍱","🌶️","🐶","🇳🇿","🏖️","💚","🏓","❤️","🎾"]
-        ];
-        let selectedArray;
-        let shuffledButtons = [];
+/*         const emojiArrays = [
+    ["💫", "🏓", "🌶️", "🏡", "🍱", "✈️", "❤️", "🎨", "🥝", "☀️", "🇳🇿", "🏂", "🇦🇷"],
+    ["🏡", "🍱", "🇳🇿", "🏖️", "🐶", "🌊", "🇦🇷", "🏂", "☀️", "💚", "🥝", "💫", "🎾"],
+    ["🌊", "✈️", "🇦🇷", "🎨", "🍱", "🌶️", "🐶", "🇳🇿", "🏖️", "💚", "🏓", "❤️", "🎾"]
+];
+let selectedArray;
+let shuffledButtons = [];
+let correctOrder = [];
+let currentSequenceIndex = 0;
+let timer;
+const totalTime = 300; // 5 minutes in seconds
+const maxTriesPerDay = 3;
 
-        let currentSequenceIndex = 0;
-        let timer;
-        const totalTime = 300; // 5 minutes in seconds
-        const maxTriesPerDay = 3;
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
 
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
+function createButtons(disable = false) {
+    const buttonsContainer = document.getElementById('buttons');
+    selectedArray = emojiArrays[Math.floor(Math.random() * emojiArrays.length)];
+    shuffledButtons = [...selectedArray];
+    shuffleArray(shuffledButtons);
+    buttonsContainer.innerHTML = '';
+    shuffledButtons.slice(0, 4).forEach(buttonEmoji => {
+        const button = document.createElement('button');
+        button.innerText = buttonEmoji;
+        button.addEventListener('click', handleButtonClick);
+        if (disable) {
+            button.disabled = true;
         }
+        buttonsContainer.appendChild(button);
+    });
+    correctOrder = selectedArray.filter(item => shuffledButtons.slice(0, 4).includes(item));
 
-        function createButtons() {
-            const buttonsContainer = document.getElementById('buttons');
-            selectedArray = emojiArrays[Math.floor(Math.random() * emojiArrays.length)];
-            shuffledButtons = [...selectedArray];
-            shuffleArray(shuffledButtons);
-            buttonsContainer.innerHTML = '';
-            shuffledButtons.slice(0, 4).forEach(buttonEmoji => {
-                const button = document.createElement('button');
-                button.innerText = buttonEmoji;
-                button.addEventListener('click', handleButtonClick);
-                buttonsContainer.appendChild(button);
-            });
-            correctOrder = selectedArray.filter(item => shuffledButtons.slice(0, 4).includes(item));
+    localStorage.setItem('shuffledButtons', JSON.stringify(shuffledButtons.slice(0, 4)));
+    localStorage.setItem('selectedArray', JSON.stringify(selectedArray));
+    localStorage.setItem('correctOrder', JSON.stringify(correctOrder));
+}
 
+function loadGameFromStorage(disable = false) {
+    const storedShuffledButtons = JSON.parse(localStorage.getItem('shuffledButtons'));
+    const storedSelectedArray = JSON.parse(localStorage.getItem('selectedArray'));
+    const storedCorrectOrder = JSON.parse(localStorage.getItem('correctOrder'));
 
+    if (storedShuffledButtons && storedSelectedArray && storedCorrectOrder) {
+        shuffledButtons = storedShuffledButtons;
+        selectedArray = storedSelectedArray;
+        correctOrder = storedCorrectOrder;
 
-            localStorage.setItem('shuffledButtons', JSON.stringify(shuffledButtons.slice(0, 4)));
-            localStorage.setItem('selectedArray', JSON.stringify(selectedArray));
-            localStorage.setItem('correctOrder', JSON.stringify(correctOrder));
-        }
-
-        function loadGameFromStorage() {
-            const storedShuffledButtons = JSON.parse(localStorage.getItem('shuffledButtons'));
-            const storedSelectedArray = JSON.parse(localStorage.getItem('selectedArray'));
-            const storedCorrectOrder = JSON.parse(localStorage.getItem('correctOrder'));
-
-            if (storedShuffledButtons && storedSelectedArray && storedCorrectOrder) {
-                shuffledButtons = storedShuffledButtons;
-                selectedArray = storedSelectedArray;
-                correctOrder = storedCorrectOrder;
-
-                const buttonsContainer = document.getElementById('buttons');
-                buttonsContainer.innerHTML = '';
-                shuffledButtons.forEach(buttonEmoji => {
-                    const button = document.createElement('button');
-                    button.innerText = buttonEmoji;
-                    button.addEventListener('click', handleButtonClick);
-                    buttonsContainer.appendChild(button);
-                });
-            } else {
-                createButtons();
+        const buttonsContainer = document.getElementById('buttons');
+        buttonsContainer.innerHTML = '';
+        shuffledButtons.forEach(buttonEmoji => {
+            const button = document.createElement('button');
+            button.innerText = buttonEmoji;
+            button.addEventListener('click', handleButtonClick);
+            if (disable) {
+                button.disabled = true;
             }
-        }
-
-        function handleButtonClick(event) {
-            console.log('button -> ', event.target.innerText)
-            console.log('expected -> ', selectedArray[currentSequenceIndex])
-            if (event.target.innerText === correctOrder[currentSequenceIndex]) {
-                currentSequenceIndex++;
-                if (currentSequenceIndex === 4) {
-                    document.getElementById('status').innerText = 'Bomb Defused!';
-                    clearInterval(timer);
-                    localStorage.removeItem('bombGameStartTime');
-                }
-            } else {
-                gameOver('BOOOM!');
-            }
-        }
-
-        function startTimer() {
-            const startTime = localStorage.getItem('bombGameStartTime');
-            const startTimeDate = startTime ? new Date(startTime) : new Date();
-            const endTimeDate = new Date(startTimeDate.getTime() + totalTime * 1000);
-
-            localStorage.setItem('bombGameStartTime', startTimeDate.toISOString());
-
-            function updateTimer() {
-                const now = new Date();
-                const remainingTime = Math.max((endTimeDate - now) / 1000, 0);
-                document.getElementById('timer').innerText = `${Math.floor(remainingTime)}s`;
-
-                if (remainingTime <= 0) {
-                    gameOver('Time Up! BOOOM!');
-                }
-            }
-
-            updateTimer();
-            timer = setInterval(updateTimer, 1000);
-        }
-
-        function gameOver(message) {
-            clearInterval(timer);
-            document.getElementById('status').innerText = message;
-            document.getElementById('timer').innerText = message;
-            localStorage.removeItem('bombGameStartTime');
-            document.getElementById('retry-button').style.display = 'block';
-            incrementTries();
-        }
-
-        function incrementTries() {
-            let today = new Date().toISOString().split('T')[0];
-            let triesData = JSON.parse(localStorage.getItem('triesData')) || {};
-            if (triesData.date !== today) {
-                triesData = { date: today, tries: 0 };
-            }
-            triesData.tries++;
-            localStorage.setItem('triesData', JSON.stringify(triesData));
-
-            if (triesData.tries >= maxTriesPerDay) {
-                document.getElementById('retry-button').disabled = true;
-                document.getElementById('status').innerText = 'No more tries left for today.';
-            }
-        }
-
-        function checkTries() {
-            let today = new Date().toISOString().split('T')[0];
-            let triesData = JSON.parse(localStorage.getItem('triesData')) || { date: today, tries: 0 };
-            if (triesData.date !== today) {
-                triesData = { date: today, tries: 0 };
-                localStorage.setItem('triesData', JSON.stringify(triesData));
-            }
-            if (triesData.tries >= maxTriesPerDay) {
-                document.getElementById('retry-button').disabled = true;
-                document.getElementById('status').innerText = 'No more tries left for today.';
-            }
-        }
-
-        document.getElementById('retry-button').addEventListener('click', () => {
-            localStorage.removeItem('shuffledButtons');
-            localStorage.removeItem('selectedArray');
-            location.reload();
+            buttonsContainer.appendChild(button);
         });
+    } else {
+        createButtons(disable);
+    }
+}
 
-        // Modal handling
-        const modal = document.getElementById('instructionsModal');
-        const btn = document.getElementById('instructions-button');
-        const span = document.getElementsByClassName('close')[0];
-
-        btn.onclick = function() {
-            modal.style.display = 'block';
+function handleButtonClick(event) {
+    console.log('button -> ', event.target.innerText);
+    console.log('expected -> ', selectedArray[currentSequenceIndex]);
+    if (event.target.innerText === correctOrder[currentSequenceIndex]) {
+        currentSequenceIndex++;
+        if (currentSequenceIndex === 4) {
+            document.getElementById('status').innerText = 'Bomb Defused!';
+            clearInterval(timer);
+            localStorage.removeItem('bombGameStartTime');
+            document.getElementById('share-button').style.display = 'block';
         }
+    } else {
+        gameOver('BOOOM!');
+    }
+}
 
-        span.onclick = function() {
-            modal.style.display = 'none';
+function startTimer() {
+    const startTime = localStorage.getItem('bombGameStartTime');
+    const startTimeDate = startTime ? new Date(startTime) : new Date();
+    const endTimeDate = new Date(startTimeDate.getTime() + totalTime * 1000);
+
+    localStorage.setItem('bombGameStartTime', startTimeDate.toISOString());
+
+    function updateTimer() {
+        const now = new Date();
+        const remainingTime = Math.max((endTimeDate - now) / 1000, 0);
+        document.getElementById('timer').innerText = `${Math.floor(remainingTime)}s`;
+
+        if (remainingTime <= 0) {
+            gameOver('Time Up! BOOOM!');
         }
+    }
 
-        window.onclick = function(event) {
-            if (event.target === modal) {
-                modal.style.display = 'none';
+    updateTimer();
+    timer = setInterval(updateTimer, 1000);
+}
+
+function gameOver(message) {
+    clearInterval(timer);
+    document.getElementById('status').innerText = message;
+    document.getElementById('timer').innerText = message;
+    localStorage.removeItem('bombGameStartTime');
+    document.getElementById('retry-button').style.display = 'block';
+    incrementTries();
+}
+
+function incrementTries() {
+    let today = new Date().toISOString().split('T')[0];
+    let triesData = JSON.parse(localStorage.getItem('triesData')) || {};
+    if (triesData.date !== today) {
+        triesData = { date: today, tries: 0 };
+    }
+    triesData.tries++;
+    localStorage.setItem('triesData', JSON.stringify(triesData));
+
+    if (triesData.tries >= maxTriesPerDay) {
+        document.getElementById('retry-button').disabled = true;
+        document.getElementById('status').innerText = 'No more tries left for today.';
+        disableButtonsAndHideTimer();
+    }
+}
+
+function checkTries() {
+    let today = new Date().toISOString().split('T')[0];
+    let triesData = JSON.parse(localStorage.getItem('triesData')) || { date: today, tries: 0 };
+    if (triesData.date !== today) {
+        triesData = { date: today, tries: 0 };
+        localStorage.setItem('triesData', JSON.stringify(triesData));
+    }
+    if (triesData.tries >= maxTriesPerDay) {
+        document.getElementById('retry-button').disabled = true;
+        document.getElementById('status').innerText = 'No more tries left for today.';
+        disableButtonsAndHideTimer();
+    }
+}
+
+function disableButtonsAndHideTimer() {
+    const buttonsContainer = document.getElementById('buttons');
+    const buttons = buttonsContainer.querySelectorAll('button');
+    buttons.forEach(button => button.disabled = true);
+    document.getElementById('timer').style.display = 'none';
+}
+
+document.getElementById('retry-button').addEventListener('click', () => {
+    localStorage.removeItem('shuffledButtons');
+    localStorage.removeItem('selectedArray');
+    location.reload();
+});
+
+document.getElementById('share-button').addEventListener('click', () => {
+    const timerText = document.getElementById('timer').innerText;
+    const message = `Today I have defused the bomb! With ${timerText} 💨`;
+    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+});
+
+// Modal handling
+const modal = document.getElementById('instructionsModal');
+const btn = document.getElementById('instructions-button');
+const span = document.getElementsByClassName('close')[0];
+
+btn.onclick = function() {
+    modal.style.display = 'block';
+}
+
+span.onclick = function() {
+    modal.style.display = 'none';
+}
+
+window.onclick = function(event) {
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+}
+
+const triesData = JSON.parse(localStorage.getItem('triesData'));
+const today = new Date().toISOString().split('T')[0];
+const disable = triesData && triesData.date === today && triesData.tries >= maxTriesPerDay;
+
+loadGameFromStorage(disable);
+if (!disable) {
+    startTimer();
+}
+checkTries();
+ */
+ const emojiArrays = [
+    ["💫", "🏓", "🌶️", "🏡", "🍱", "✈️", "❤️", "🎨", "🥝", "☀️", "🇳🇿", "🏂", "🇦🇷"],
+    ["🏡", "🍱", "🇳🇿", "🏖️", "🐶", "🌊", "🇦🇷", "🏂", "☀️", "💚", "🥝", "💫", "🎾"],
+    ["🌊", "✈️", "🇦🇷", "🎨", "🍱", "🌶️", "🐶", "🇳🇿", "🏖️", "💚", "🏓", "❤️", "🎾"]
+];
+let selectedArray;
+let shuffledButtons = [];
+let correctOrder = [];
+let currentSequenceIndex = 0;
+let timer;
+const totalTime = 300; // 5 minutes in seconds
+const maxTriesPerDay = 3;
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+function createButtons(disable = false) {
+    const buttonsContainer = document.getElementById('buttons');
+    selectedArray = emojiArrays[Math.floor(Math.random() * emojiArrays.length)];
+    shuffledButtons = [...selectedArray];
+    shuffleArray(shuffledButtons);
+    buttonsContainer.innerHTML = '';
+    shuffledButtons.slice(0, 4).forEach(buttonEmoji => {
+        const button = document.createElement('button');
+        button.innerText = buttonEmoji;
+        button.addEventListener('click', handleButtonClick);
+        if (disable) {
+            button.disabled = true;
+        }
+        buttonsContainer.appendChild(button);
+    });
+    correctOrder = selectedArray.filter(item => shuffledButtons.slice(0, 4).includes(item));
+
+    localStorage.setItem('shuffledButtons', JSON.stringify(shuffledButtons.slice(0, 4)));
+    localStorage.setItem('selectedArray', JSON.stringify(selectedArray));
+    localStorage.setItem('correctOrder', JSON.stringify(correctOrder));
+}
+
+function loadGameFromStorage(disable = false) {
+    const storedShuffledButtons = JSON.parse(localStorage.getItem('shuffledButtons'));
+    const storedSelectedArray = JSON.parse(localStorage.getItem('selectedArray'));
+    const storedCorrectOrder = JSON.parse(localStorage.getItem('correctOrder'));
+
+    if (storedShuffledButtons && storedSelectedArray && storedCorrectOrder) {
+        shuffledButtons = storedShuffledButtons;
+        selectedArray = storedSelectedArray;
+        correctOrder = storedCorrectOrder;
+
+        const buttonsContainer = document.getElementById('buttons');
+        buttonsContainer.innerHTML = '';
+        shuffledButtons.forEach(buttonEmoji => {
+            const button = document.createElement('button');
+            button.innerText = buttonEmoji;
+            button.addEventListener('click', handleButtonClick);
+            if (disable) {
+                button.disabled = true;
             }
-        }
+            buttonsContainer.appendChild(button);
+        });
+    } else {
+        createButtons(disable);
+    }
+}
 
-        loadGameFromStorage();
-        startTimer();
-        checkTries();
+function handleButtonClick(event) {
+    console.log('button -> ', event.target.innerText);
+    console.log('expected -> ', selectedArray[currentSequenceIndex]);
+    if (event.target.innerText === correctOrder[currentSequenceIndex]) {
+        currentSequenceIndex++;
+        if (currentSequenceIndex === 4) {
+            bombDefused();
+        }
+    } else {
+        gameOver('BOOOM!');
+    }
+}
+
+function startTimer() {
+    const startTime = localStorage.getItem('bombGameStartTime');
+    const startTimeDate = startTime ? new Date(startTime) : new Date();
+    const endTimeDate = new Date(startTimeDate.getTime() + totalTime * 1000);
+
+    localStorage.setItem('bombGameStartTime', startTimeDate.toISOString());
+
+    function updateTimer() {
+        const now = new Date();
+        const remainingTime = Math.max((endTimeDate - now) / 1000, 0);
+        document.getElementById('timer').innerText = `${Math.floor(remainingTime)}s`;
+
+        if (remainingTime <= 0) {
+            gameOver('Time Up! BOOOM!');
+        }
+    }
+
+    updateTimer();
+    timer = setInterval(updateTimer, 1000);
+}
+
+function bombDefused() {
+    document.getElementById('status').innerText = 'Fiuf! That was close, thanks. Bomb Defused!';
+    clearInterval(timer);
+    localStorage.removeItem('bombGameStartTime');
+    localStorage.setItem('bombDefused', 'true');
+    const remainingTime = document.getElementById('timer').innerText;
+    localStorage.setItem('remainingTime', remainingTime);
+    document.getElementById('share-button').style.display = 'block';
+    disableButtons();
+}
+
+function gameOver(message) {
+    document.getElementById('bomb-image').style.display = 'block';
+    document.getElementById('bomb-image').style.width = '300px';
+    document.getElementById('bomb-image').style.height = '400px';
+    clearInterval(timer);
+    document.getElementById('status').innerText = message;
+    document.getElementById('timer').innerText = message;
+    localStorage.removeItem('bombGameStartTime');
+    document.getElementById('retry-button').style.display = 'block';
+    incrementTries();
+}
+
+function incrementTries() {
+    let today = new Date().toISOString().split('T')[0];
+    let triesData = JSON.parse(localStorage.getItem('triesData')) || {};
+    if (triesData.date !== today) {
+        triesData = { date: today, tries: 0 };
+    }
+    triesData.tries++;
+    localStorage.setItem('triesData', JSON.stringify(triesData));
+
+    if (triesData.tries >= maxTriesPerDay) {
+        document.getElementById('retry-button').disabled = true;
+        document.getElementById('status').innerText = 'Three bombs were dropped already, please no more today. Come back tomorrow.';
+        disableButtonsAndHideTimer();
+    }
+}
+
+function checkTries() {
+    let today = new Date().toISOString().split('T')[0];
+    let triesData = JSON.parse(localStorage.getItem('triesData')) || { date: today, tries: 0 };
+    if (triesData.date !== today) {
+        triesData = { date: today, tries: 0 };
+        localStorage.setItem('triesData', JSON.stringify(triesData));
+    }
+    if (triesData.tries >= maxTriesPerDay) {
+        document.getElementById('retry-button').disabled = true;
+        document.getElementById('status').innerText = 'Three bombs were dropped already, please no more today. Come back tomorrow.';
+        disableButtonsAndHideTimer();
+    }
+}
+
+function disableButtons() {
+    const buttonsContainer = document.getElementById('buttons');
+    const buttons = buttonsContainer.querySelectorAll('button');
+    buttons.forEach(button => button.disabled = true);
+}
+
+function disableButtonsAndHideTimer() {
+    disableButtons();
+    document.getElementById('timer').style.display = 'none';
+}
+
+document.getElementById('retry-button').addEventListener('click', () => {
+    localStorage.removeItem('shuffledButtons');
+    localStorage.removeItem('selectedArray');
+    localStorage.removeItem('bombDefused');
+    localStorage.removeItem('remainingTime');
+    location.reload();
+});
+
+document.getElementById('share-button').addEventListener('click', () => {
+    const timerText = document.getElementById('timer').innerText;
+    const message = `Today I have defused the bomb! With ${timerText} left 💨`;
+    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+});
+
+// Modal handling
+const modal = document.getElementById('instructionsModal');
+const btn = document.getElementById('instructions-button');
+const span = document.getElementsByClassName('close')[0];
+
+btn.onclick = function() {
+    modal.style.display = 'block';
+}
+
+span.onclick = function() {
+    modal.style.display = 'none';
+}
+
+window.onclick = function(event) {
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+}
+
+function initializeGame() {
+    const triesData = JSON.parse(localStorage.getItem('triesData'));
+    const today = new Date().toISOString().split('T')[0];
+    const disable = triesData && triesData.date === today && triesData.tries >= maxTriesPerDay;
+
+    if (localStorage.getItem('bombDefused') === 'true') {
+        document.getElementById('status').innerText = 'Fiuf! That was close, thanks. Bomb Defused!';
+        document.getElementById('share-button').style.display = 'block';
+        const remainingTime = localStorage.getItem('remainingTime');
+        document.getElementById('timer').innerText = remainingTime;
+        disableButtons();
+    } else {
+        loadGameFromStorage(disable);
+        if (!disable) {
+            startTimer();
+        }
+    }
+
+    checkTries();
+}
+
+initializeGame();
+
     </script>
 </body>
 </html>
