@@ -108,6 +108,7 @@ function bombDefused() {
     const remainingTime = document.getElementById('timer').innerText;
     localStorage.setItem('remainingTime', remainingTime);
     document.getElementById('share-button').style.display = 'block';
+    document.getElementById('retry-button').style.display = 'block';
     disableButtons();
 }
 
@@ -209,6 +210,7 @@ function initializeGame() {
     if (localStorage.getItem('bombDefused') === 'true') {
         document.getElementById('status').innerText = 'Fiuf! That was close, thanks. Bomb Defused!';
         document.getElementById('share-button').style.display = 'block';
+        document.getElementById('retry-button').style.display = 'block';
         const remainingTime = localStorage.getItem('remainingTime');
         document.getElementById('timer').innerText = remainingTime;
         disableButtons();
