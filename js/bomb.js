@@ -9,7 +9,7 @@ let correctOrder = [];
 let currentSequenceIndex = 0;
 let timer;
 const totalTime = 60;
-const maxTriesPerDay = 3;
+const maxTriesPerDay = 9999999999;
 
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -132,11 +132,11 @@ function incrementTries() {
     triesData.tries++;
     localStorage.setItem('triesData', JSON.stringify(triesData));
 
-/*     if (triesData.tries >= maxTriesPerDay) {
+    if (triesData.tries >= maxTriesPerDay) {
         document.getElementById('retry-button').disabled = true;
         document.getElementById('status').innerText = 'Three bombs were dropped already, please no more today. Come back tomorrow.';
         disableButtonsAndHideTimer();
-    } */
+    }
 }
 
 function checkTries() {
@@ -146,14 +146,14 @@ function checkTries() {
         triesData = { date: today, tries: 0 };
         localStorage.setItem('triesData', JSON.stringify(triesData));
     }
-/*     if (triesData.tries >= maxTriesPerDay) {
+    if (triesData.tries >= maxTriesPerDay) {
         document.getElementById('retry-button').disabled = true;
         document.getElementById('status').innerText = 'Three bombs were dropped already, please no more today. Come back tomorrow.';
         document.getElementById('bomb-image').style.display = 'block';
         document.getElementById('bomb-image').style.width = '300px';
         document.getElementById('bomb-image').style.height = '400px';
         disableButtonsAndHideTimer();
-    } */
+    }
 }
 
 function disableButtons() {
@@ -204,7 +204,7 @@ window.onclick = function(event) {
 function initializeGame() {
     const triesData = JSON.parse(localStorage.getItem('triesData'));
     const today = new Date().toISOString().split('T')[0];
-    //const disable = triesData && triesData.date === today && triesData.tries >= maxTriesPerDay;
+    const disable = triesData && triesData.date === today && triesData.tries >= maxTriesPerDay;
 
     if (localStorage.getItem('bombDefused') === 'true') {
         document.getElementById('status').innerText = 'Fiuf! That was close, thanks. Bomb Defused!';
