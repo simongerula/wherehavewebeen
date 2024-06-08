@@ -8,7 +8,7 @@ let shuffledButtons = [];
 let correctOrder = [];
 let currentSequenceIndex = 0;
 let timer;
-const totalTime = 120;
+const totalTime = 60;
 const maxTriesPerDay = 3;
 
 function shuffleArray(array) {
