@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const correctWord = 'SWEET';
-    const maxTries = 3;
+    const correctWord = 'CUTIE';
+    const maxTries = 5; // Updated maxTries to 5
     let currentAttempt = [];
     let attempts = JSON.parse(localStorage.getItem('attempts')) || [];
     let canCancel = true;
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const initializeBoard = () => {
         gameBoard.innerHTML = '';
-        for (let i = 0; i < 15; i++) {
+        for (let i = 0; i < 25; i++) { // Adjusted to create 25 tiles for 5 tries
             const tile = document.createElement('div');
             tile.classList.add('tile');
             gameBoard.appendChild(tile);
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const updateBoard = () => {
-        for (let i = 0; i < 15; i++) {
+        for (let i = 0; i < 25; i++) { // Adjusted to clear 25 tiles for 5 tries
             const tile = gameBoard.children[i];
             tile.textContent = '';
             tile.classList.remove('green', 'yellow');
