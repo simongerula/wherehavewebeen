@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const correctWord = 'GOALS';
-    const maxTries = 5; // Updated maxTries to 5
+    const maxTries = 5;
     let currentAttempt = [];
     let attempts = JSON.parse(localStorage.getItem('attempts')) || [];
     let canCancel = true;
@@ -15,23 +15,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const showMessage = (msg, finalAttempt) => {
         clearTimeout(messageTimeout);
         messageContainer.textContent = msg;
-    
+
         if (finalAttempt) {
-            // Create a Share button
             const shareButton = document.createElement('button');
             shareButton.textContent = 'Share';
             shareButton.classList.add('sharebutton');
             shareButton.addEventListener('click', () => {
                 shareOnWhatsApp();
             });
-    
-            // Append the Share button to the message container
+
             messageContainer.appendChild(shareButton);
-    
-            // Save the final message state to localStorage
             localStorage.setItem('finalMessage', JSON.stringify({ msg, finalAttempt: true }));
         }
-    
+
         messageContainer.style.opacity = 1;
     };
 
@@ -41,33 +37,24 @@ document.addEventListener('DOMContentLoaded', () => {
             const { msg, finalAttempt } = JSON.parse(savedMessage);
             showMessage(msg, finalAttempt);
         }
-    };    
+    };
 
     const shareOnWhatsApp = () => {
-        // Calculate correct and incorrect icons for the current attempt
         const correctIcons = currentAttempt.map((char, index) => char === correctWord[index] ? '🟩' : (correctWord.includes(char) ? '🟨' : '⬜️')).join('');
-
-        // Prepare the message to be shared on WhatsApp
         let shareMessage = `Today's wordle ${attempts.length}/${maxTries}\n`;
         attempts.forEach((attempt) => {
             const attemptIcons = attempt.result.map((result) => result === 'correct' ? '🟩' : (result === 'present' ? '🟨' : '⬜️')).join('');
             shareMessage += `${attemptIcons}\n`;
         });
         shareMessage += `${correctIcons}`;
-
-        // Encode the message for WhatsApp URL
         const encodedMessage = encodeURIComponent(shareMessage);
-
-        // Construct the WhatsApp share URL
         const shareURL = `https://wa.me/?text=${encodedMessage}`;
-
-        // Open the WhatsApp share URL in a new tab
         window.open(shareURL, '_blank');
     };
 
     const initializeBoard = () => {
         gameBoard.innerHTML = '';
-        for (let i = 0; i < 25; i++) { // Adjusted to create 25 tiles for 5 tries
+        for (let i = 0; i < 25; i++) {
             const tile = document.createElement('div');
             tile.classList.add('tile');
             gameBoard.appendChild(tile);
@@ -104,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentAttempt.length === 5 && attempts.length < maxTries) {
             const result = currentAttempt.map((char, index) => char === correctWord[index] ? 'correct' : (correctWord.includes(char) ? 'present' : 'incorrect'));
             attempts.push({ word: currentAttempt.join(''), result });
-            saveAttempts();
+            saveAttempts();  // Ensure that the attempts are saved
 
             if (result.every(r => r === 'correct')) {
                 showMessage('Well done love! You are AMAAAZING❤️', true);
@@ -129,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const updateBoard = () => {
-        for (let i = 0; i < 25; i++) { // Adjusted to clear 25 tiles for 5 tries
+        for (let i = 0; i < 25; i++) {
             const tile = gameBoard.children[i];
             tile.textContent = '';
             tile.classList.remove('green', 'yellow');
@@ -145,28 +132,19 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const clearAttemptsIfYesterday = () => {
-        const lastAttemptDate = localStorage.getItem('lastAttemptDate');
+        const lastAttemptDateX = localStorage.getItem('lastAttemptDateX');
         const today = new Date();
+        const todayStr = today.toDateString();
         const yesterday = new Date(today);
         yesterday.setDate(today.getDate() - 1);
 
-        if(!lastAttemptDate){
+        if (!lastAttemptDateX || lastAttemptDateX !== todayStr) {
             localStorage.removeItem('attempts');
+            localStorage.removeItem('finalMessage');
             attempts = [];
             saveAttempts();
+            localStorage.setItem('lastAttemptDateX', todayStr);
         }
-        if (lastAttemptDate) {
-            const lastAttemptDateTime = new Date(lastAttemptDate);
-            if (lastAttemptDateTime.getDate() === yesterday.getDate() &&
-                lastAttemptDateTime.getMonth() === yesterday.getMonth() &&
-                lastAttemptDateTime.getFullYear() === yesterday.getFullYear()) {
-                localStorage.removeItem('attempts');
-                attempts = [];
-                saveAttempts();
-            }
-        }
-
-        localStorage.setItem('lastAttemptDate', today);
     };
 
     keys.forEach(key => {
@@ -177,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
     cancelButton.addEventListener('click', handleCancel);
 
     initializeBoard();
-    updateBoard();
     clearAttemptsIfYesterday();
+    updateBoard();
     loadFinalMessage();
 });
