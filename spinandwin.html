@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spin and Win</title>
+    <style>
+        body {
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            text-align: center;
+        }
+
+        .wheel {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            border: 10px solid #333;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto;
+            transition: transform 4s ease-out;
+        }
+
+        .segment {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            transform-origin: 100% 100%;
+            clip-path: polygon(0 0, 100% 0, 100% 100%);
+        }
+
+        .segment:nth-child(1) { transform: rotate(0deg); background-color: #f44336; } /* Red */
+        .segment:nth-child(2) { transform: rotate(15deg); background-color: #e91e63; } /* Pink */
+        .segment:nth-child(3) { transform: rotate(30deg); background-color: #9c27b0; } /* Purple */
+        .segment:nth-child(4) { transform: rotate(45deg); background-color: #673ab7; } /* Deep Purple */
+        .segment:nth-child(5) { transform: rotate(60deg); background-color: #b1d943; } /* Indigo */
+        .segment:nth-child(6) { transform: rotate(75deg); background-color: #2196f3; } /* Blue */
+        .segment:nth-child(7) { transform: rotate(90deg); background-color: #03a9f4; } /* Light Blue */
+        .segment:nth-child(8) { transform: rotate(105deg); background-color: #00bcd4; } /* Cyan */
+        .segment:nth-child(9) { transform: rotate(120deg); background-color: #009688; } /* Teal */
+        .segment:nth-child(10) { transform: rotate(135deg); background-color: #4caf50; } /* Green */
+        .segment:nth-child(11) { transform: rotate(150deg); background-color: #8bc34a; } /* Light Green */
+        .segment:nth-child(12) { transform: rotate(165deg); background-color: #cddc39; } /* Lime */
+        .segment:nth-child(13) { transform: rotate(180deg); background-color: #ffeb3b; } /* Yellow */
+        .segment:nth-child(14) { transform: rotate(195deg); background-color: #ffc107; } /* Amber */
+        .segment:nth-child(15) { transform: rotate(210deg); background-color: #ff9800; } /* Orange */
+        .segment:nth-child(16) { transform: rotate(225deg); background-color: #ff5722; } /* Deep Orange */
+        .segment:nth-child(17) { transform: rotate(240deg); background-color: #795548; } /* Brown */
+        .segment:nth-child(18) { transform: rotate(255deg); background-color: #9e9e9e; } /* Grey */
+        .segment:nth-child(19) { transform: rotate(270deg); background-color: #607d8b; } /* Blue Grey */
+        .segment:nth-child(20) { transform: rotate(285deg); background-color: #000000; } /* Black */
+        .segment:nth-child(21) { transform: rotate(300deg); background-color: #1a237e; } /* Dark Blue */
+        .segment:nth-child(22) { transform: rotate(315deg); background-color: #004d40; } /* Dark Green */
+        .segment:nth-child(23) { transform: rotate(330deg); background-color: #03a9f4; } /* Dark Purple */
+        .segment:nth-child(24) { transform: rotate(345deg); background-color: #32aa7a; } /* Dark Red */
+
+        .wheel img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px; /* Adjust size as needed */
+            height: 80px; /* Adjust size as needed */
+            border-radius: 50%;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #444;
+        }
+
+        #result, #result1 {
+            margin-top: 20px;
+            font-size: 20px;
+        }
+
+        .footer {
+            margin-top: 20px;
+        }
+
+        .footer a {
+            text-decoration: none;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="wheel" id="wheel">
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <img src="src/spinandwinimg.png" alt="Center Image">
+        </div>
+        <button id="spinButton">SPIN</button>
+        <div id="result"></div>
+        <div id="result1"></div>
+
+        <hr>
+        <p class="footer">I love you forever <a href="https://open.spotify.com/track/6BEP2k75mE8u8gHdvxV3mn?si=34b3a4493d944e6e">❤️</a></p>
+        <p class="footer">Back to the main page <a href="/wherehavewebeen/">🗺️</a></p>
+
+    </div>
+    <script>
+        document.getElementById('spinButton').addEventListener('click', function() {
+            const wheel = document.getElementById('wheel');
+            const segments = wheel.querySelectorAll('.segment').length;
+            const degreesPerSegment = 360 / segments;
+
+            const randomSpin = Math.floor(Math.random() * 360) + 360 * 3; // At least 3 full rotations
+            const segmentIndex = Math.floor((randomSpin % 360) / degreesPerSegment);
+            const prizes = [
+                ""
+            ];
+
+            wheel.style.transform = `rotate(${randomSpin}deg)`;
+
+            setTimeout(() => {
+                confetti();
+                document.getElementById('result').textContent = `CONGRATS MY LOVE!`;
+                document.getElementById('result1').textContent = `You are the best partner in the WORLD!`;
+            }, 4000); // 4 seconds to match the CSS transition duration
+        });
+
+        function confetti() {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
+</body>
+</html>
