@@ -181,7 +181,7 @@ const mouseFunction = (mouse) => {
         console.log("You win!");
       }
     }
-  };
+};
   
-  window.addEventListener("mousemove", mouseFunction);
-  window.addEventListener("touchmove", mouseFunction);
+window.addEventListener("mousemove", mouseFunction);
+window.addEventListener("touchmove", mouseFunction);
