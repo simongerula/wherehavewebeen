@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How much I love you?</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .progress-container {
+            width: 80%;
+            background-color: #333;
+            border-radius: 25px;
+            overflow:visible;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 30px;
+            width: 0;
+            background-color: #4caf50;
+            border-radius: 25px;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .progress-percent {
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <img id="thisImage" src="" alt="">
+    <h1>How much I love you?</h1>
+    <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+        <div class="progress-percent" id="progress-percent">0%</div>
+    </div>
+    <button onclick="startProgress()">Test</button>
+
+    <script>
+        function startProgress() {
+            const progressBar = document.getElementById('progress-bar');
+            const progressPercent = document.getElementById('progress-percent');
+            const thisImage = document.getElementById('thisImage');
+            let width = 0;
+            
+            const interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        width = 85;
+                        progressBar.style.width = '85%';
+                        progressPercent.textContent = '85%';
+                        
+                        setTimeout(() => {
+                            progressBar.style.width = '200%';
+                            progressPercent.textContent = '∞%';
+                            thisImage.src = 'https://i.giphy.com/l4pTdcifPZLpDjL1e.webp';
+                        }, 1000);
+                    }, 500);
+                } else {
+                    width++;
+                    progressBar.style.width = width + '%';
+                    progressPercent.textContent = width + '%';
+                }
+            }, 30);
+        }
+    </script>
+</body>
+</html>
