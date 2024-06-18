@@ -63,8 +63,8 @@
     <button id="startButton">Take me with you</button>
     <button id="screenshotButton" style="display: none;">📸</button>
     <div id="videoContainer">
-        <video id="video" autoplay></video>
-        <img id="overlay" src="src/person.png" alt="Person Overlay">
+        <video id="video" autoplay muted playsinline></video>
+        <img id="overlay" src="person.png" alt="Person Overlay">
     </div>
     <script>
         const startButton = document.getElementById('startButton');
@@ -78,6 +78,7 @@
                 video.srcObject = stream;
                 startButton.style.display = 'none';
                 screenshotButton.style.display = 'block';
+                video.play(); // Explicitly start playing the video
             } catch (error) {
                 console.error('Error accessing camera:', error);
             }
@@ -112,4 +113,3 @@
     </script>
 </body>
 </html>
-
