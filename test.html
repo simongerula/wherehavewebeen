@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera with Overlay</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+        }
+        #videoContainer {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        video, img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        #overlay {
+            pointer-events: none;
+            z-index: 1;
+            display: none;
+            transform: scale(0.9); /* Reduce size to 90% */
+        }
+        #startButton, #screenshotButton {
+            position: absolute;
+            z-index: 2;
+            background-color: rgba(255, 255, 255, 0.7);
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #startButton {
+            top: 20px;
+        }
+        #screenshotButton {
+            bottom: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <button id="startButton">Take me with you</button>
+    <button id="screenshotButton" style="display: none;">📸</button>
+    <div id="videoContainer">
+        <video id="video" autoplay></video>
+        <img id="overlay" src="src/person.png" alt="Person Overlay">
+    </div>
+    <script>
+        const startButton = document.getElementById('startButton');
+        const screenshotButton = document.getElementById('screenshotButton');
+        const video = document.getElementById('video');
+        const overlay = document.getElementById('overlay');
+
+        startButton.addEventListener('click', async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = stream;
+                startButton.style.display = 'none';
+                screenshotButton.style.display = 'block';
+            } catch (error) {
+                console.error('Error accessing camera:', error);
+            }
+        });
+
+        video.addEventListener('loadeddata', () => {
+            overlay.style.display = 'block';
+        });
+
+        screenshotButton.addEventListener('click', () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const context = canvas.getContext('2d');
+
+            // Draw the video frame
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Draw the overlay image
+            const img = new Image();
+            img.src = overlay.src;
+            img.onload = () => {
+                context.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                // Create a link to download the image
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = 'screenshot.png';
+                link.click();
+            };
+        });
+    </script>
+</body>
+</html>
+
