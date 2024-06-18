@@ -64,7 +64,7 @@
     <button id="screenshotButton" style="display: none;">📸</button>
     <div id="videoContainer">
         <video id="video" autoplay muted playsinline></video>
-        <img id="overlay" src="person.png" alt="Person Overlay">
+        <img id="overlay" src="src/person.png" alt="Person Overlay">
     </div>
     <script>
         const startButton = document.getElementById('startButton');
@@ -74,7 +74,7 @@
 
         startButton.addEventListener('click', async () => {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { exact: "environment" } } });
                 video.srcObject = stream;
                 startButton.style.display = 'none';
                 screenshotButton.style.display = 'block';
@@ -98,17 +98,13 @@
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
             // Draw the overlay image
-            const img = new Image();
-            img.src = overlay.src;
-            img.onload = () => {
-                context.drawImage(img, 0, 0, canvas.width, canvas.height);
+            context.drawImage(overlay, 0, 0, canvas.width, canvas.height);
 
-                // Create a link to download the image
-                const link = document.createElement('a');
-                link.href = canvas.toDataURL('image/png');
-                link.download = 'screenshot.png';
-                link.click();
-            };
+            // Create a link to download the image
+            const link = document.createElement('a');
+            link.href = canvas.toDataURL('image/png');
+            link.download = 'screenshot.png';
+            link.click();
         });
     </script>
 </body>
