@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Camera with Overlay</title>
+    <title>Would you take me with you?</title>
     <style>
         body, html {
             margin: 0;
@@ -34,7 +34,7 @@
             pointer-events: none;
             z-index: 1;
             display: none;
-            transform: scale(0.9); /* Reduce size to 90% */
+            transform: scale(0.8);
         }
         #startButton, #screenshotButton {
             position: absolute;
@@ -60,7 +60,7 @@
     </style>
 </head>
 <body>
-    <button id="startButton">Take me with you</button>
+    <button id="startButton">Would you take me with you love?</button>
     <button id="screenshotButton" style="display: none;">📸</button>
     <div id="videoContainer">
         <video id="video" autoplay muted playsinline></video>
@@ -78,7 +78,7 @@
                 video.srcObject = stream;
                 startButton.style.display = 'none';
                 screenshotButton.style.display = 'block';
-                video.play(); // Explicitly start playing the video
+                video.play();
             } catch (error) {
                 console.error('Error accessing camera:', error);
             }
