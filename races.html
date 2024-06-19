@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Racing Game</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            /*background-color: #333;*/
+            background-image: url("src/racesbg.png");
+            background-size: auto;
+            font-family: Arial, sans-serif;
+            color: #fff;
+        }
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            max-width: 600px;
+        }
+        .player {
+            position: absolute;
+            bottom: 0;
+            width: 150px;
+        }
+        #player1 {
+            left: 15%;
+        }
+        #player2 {
+            right: 15%;
+        }
+        button {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 20px 20px;
+            font-size: 35px;
+            border-radius: 5%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="src/pingpong1.png" id="player1" class="player">
+        <img src="src/pingpong2.png" id="player2" class="player">
+    </div>
+    <button id="runButton">Run Love!</button>
+
+    <script>
+        const player1 = document.getElementById('player1');
+        const player2 = document.getElementById('player2');
+        const runButton = document.getElementById('runButton');
+        
+        let player1Position = 0;
+        let player2Position = 0;
+
+        const playerSpeed = 5; // Speed of the players in pixels per step
+        const aiSpeed = 4; // Speed of the AI player
+
+        let isFirstRun = true;
+
+        runButton.addEventListener('click', () => {
+            movePlayer1();
+            if (isFirstRun) {
+                isFirstRun = false;
+                moveAI(); // Start AI movement after player 1 starts moving
+            }
+        });
+
+        function movePlayer1() {
+            player1Position += playerSpeed;
+            player1.style.bottom = `${player1Position}px`;
+            checkWinner();
+        }
+
+        function moveAI() {
+            player2Position += aiSpeed;
+            player2.style.bottom = `${player2Position}px`;
+            checkWinner();
+            if (player2Position < document.querySelector('.container').offsetHeight - 50) {
+                setTimeout(moveAI, 108); // Continue moving AI
+            }
+        }
+
+        function checkWinner() {
+            const containerHeight = document.querySelector('.container').offsetHeight;
+            if (player1Position >= containerHeight - 50) {
+                alert('Love! Sophie Usain Handford! I LOVE YOU');
+                resetGame();
+            }
+            if (player2Position >= containerHeight - 50) {
+                alert('Next time love, I know you can');
+                resetGame();
+            }
+        }
+
+        function resetGame() {
+            player1Position = 0;
+            player2Position = 0;
+            player1.style.bottom = '0px';
+            player2.style.bottom = '0px';
+            isFirstRun = true; // Reset isFirstRun flag for next game
+        }
+    </script>
+</body>
+</html>
