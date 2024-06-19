@@ -61,7 +61,7 @@
         const paddleHeight = containerHeight * 0.15; // 3% of container height
         const ballSize = containerHeight * 0.025; // 2.5% of container height
         const playerSpeed = 10;
-        const aiSpeed = 7;
+        const aiSpeed = 8;
         const initialBallSpeed = 6;
         const speedIncrement = 1.2;
 
@@ -176,7 +176,7 @@
 
             // Check for winning condition
             if (playerScore === 3 || aiScore === 3) {
-                alert(playerScore === 3 ? "You win!" : "AI wins!");
+                alert(playerScore === 3 ? "Well done my love! You Win 🏆" : "Sorry love, keep trying! You can do it!");
                 playerScore = 0;
                 aiScore = 0;
                 gameStarted = false;
