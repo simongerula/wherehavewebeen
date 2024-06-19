@@ -17,11 +17,10 @@
 
         #gameContainer {
             position: relative;
-            width: 100%;
-            max-width: 600px;
+            width: 90vw;
+            max-width: 450px;
             aspect-ratio: 3 / 4;
             border: 2px solid #fff;
-            margin-top: 20px;
         }
 
         canvas {
@@ -47,12 +46,16 @@
         const ctx = canvas.getContext('2d');
         const startButton = document.getElementById('startButton');
 
-        canvas.width = 600;
-        canvas.height = 800;
+        const gameContainer = document.getElementById('gameContainer');
+        const containerWidth = gameContainer.offsetWidth;
+        const containerHeight = gameContainer.offsetHeight;
 
-        const paddleWidth = 100;
-        const paddleHeight = 100;
-        const ballSize = 10;
+        canvas.width = containerWidth;
+        canvas.height = containerHeight;
+
+        const paddleWidth = containerWidth * 0.15; // 15% of container width
+        const paddleHeight = containerHeight * 0.15; // 3% of container height
+        const ballSize = containerHeight * 0.025; // 2.5% of container height
         const playerSpeed = 10;
         const aiSpeed = 7;
         const initialBallSpeed = 6;
@@ -207,6 +210,7 @@
 
             // Draw scores
             ctx.font = '30px Arial';
+            ctx.fillStyle = '#fff';
             ctx.fillText(playerScore, canvas.width / 4, 50);
             ctx.fillText(aiScore, 3 * canvas.width / 4, 50);
         }
