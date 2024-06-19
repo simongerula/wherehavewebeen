@@ -5,15 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pong Game</title>
     <style>
-        body {
+        html, body {
             margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* Prevent vertical scrolling */
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
             background-color: #000;
             flex-direction: column;
-            overflow: hidden;
         }
 
         #gameContainer {
@@ -34,14 +36,15 @@
             padding: 10px 20px;
             font-size: 20px;
             cursor: pointer;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <button id="startButton">Start Game</button>
     <div id="gameContainer">
         <canvas id="pongCanvas"></canvas>
     </div>
+    <button id="startButton">Start Game</button>
     <script>
         const canvas = document.getElementById('pongCanvas');
         const ctx = canvas.getContext('2d');
@@ -58,7 +61,7 @@
         const paddleHeight = containerHeight * 0.15; // 3% of container height
         const ballSize = containerHeight * 0.025; // 2.5% of container height
         const playerSpeed = 10;
-        const aiSpeed = 8;
+        const aiSpeed = 7;
         const initialBallSpeed = 6;
         const speedIncrement = 1.2;
 
