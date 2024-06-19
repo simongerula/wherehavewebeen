@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pong Game</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000;
+            flex-direction: column;
+        }
+
+        #gameContainer {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            aspect-ratio: 3 / 4;
+            border: 2px solid #fff;
+            margin-top: 20px;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        #startButton {
+            padding: 10px 20px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <button id="startButton">Start Game</button>
+    <div id="gameContainer">
+        <canvas id="pongCanvas"></canvas>
+    </div>
+    <script>
+        const canvas = document.getElementById('pongCanvas');
+        const ctx = canvas.getContext('2d');
+        const startButton = document.getElementById('startButton');
+
+        canvas.width = 600;
+        canvas.height = 800;
+
+        const paddleWidth = 100;
+        const paddleHeight = 100;
+        const ballSize = 10;
+        const playerSpeed = 10;
+        const aiSpeed = 7;
+        const initialBallSpeed = 6;
+        const speedIncrement = 1.2;
+
+        let playerScore = 0;
+        let aiScore = 0;
+        let gameStarted = false;
+        let hitCount = 0;
+
+        const playerPaddleImage = new Image();
+        playerPaddleImage.src = 'src/pingpong1.png';
+
+        const aiPaddleImage = new Image();
+        aiPaddleImage.src = 'src/pingpong2.png';
+
+        const playerPaddle = {
+            x: canvas.width / 2 - paddleWidth / 2,
+            y: canvas.height - paddleHeight,
+            width: paddleWidth,
+            height: paddleHeight,
+            image: playerPaddleImage
+        };
+
+        const aiPaddle = {
+            x: canvas.width / 2 - paddleWidth / 2,
+            y: 0,
+            width: paddleWidth,
+            height: paddleHeight,
+            image: aiPaddleImage
+        };
+
+        const ball = {
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            size: ballSize,
+            speedX: initialBallSpeed,
+            speedY: initialBallSpeed,
+            color: '#fff'
+        };
+
+        function startGame() {
+            gameStarted = true;
+            playerScore = 0;
+            aiScore = 0;
+            hitCount = 0;
+            resetBall();
+            gameLoop();
+        }
+
+        startButton.addEventListener('click', startGame);
+
+        canvas.addEventListener('mousemove', event => {
+            const rect = canvas.getBoundingClientRect();
+            playerPaddle.x = event.clientX - rect.left - playerPaddle.width / 2;
+        });
+
+        canvas.addEventListener('touchmove', event => {
+            const rect = canvas.getBoundingClientRect();
+            playerPaddle.x = event.touches[0].clientX - rect.left - playerPaddle.width / 2;
+        });
+
+        function resetBall() {
+            ball.x = canvas.width / 2;
+            ball.y = canvas.height / 2;
+            ball.speedX = initialBallSpeed * (Math.random() > 0.5 ? 1 : -1);
+            ball.speedY = initialBallSpeed * (Math.random() > 0.5 ? 1 : -1);
+        }
+
+        function update() {
+            if (!gameStarted) return;
+
+            // Move ball
+            ball.x += ball.speedX;
+            ball.y += ball.speedY;
+
+            // Bounce off side walls
+            if (ball.x <= 0 || ball.x + ball.size >= canvas.width) {
+                ball.speedX = -ball.speedX;
+            }
+
+            // Check for paddle collisions
+            if (ball.y + ball.size >= playerPaddle.y &&
+                ball.x >= playerPaddle.x &&
+                ball.x <= playerPaddle.x + playerPaddle.width) {
+                ball.speedY = -ball.speedY;
+                increaseSpeed();
+            }
+
+            if (ball.y <= aiPaddle.y + aiPaddle.height &&
+                ball.x >= aiPaddle.x &&
+                ball.x <= aiPaddle.x + aiPaddle.width) {
+                ball.speedY = -ball.speedY;
+                increaseSpeed();
+            }
+
+            // AI paddle movement
+            if (aiPaddle.x + aiPaddle.width / 2 < ball.x) {
+                aiPaddle.x += aiSpeed;
+            } else {
+                aiPaddle.x -= aiSpeed;
+            }
+
+            // Scoring
+            if (ball.y <= 0) {
+                playerScore++;
+                resetBall();
+            }
+
+            if (ball.y + ball.size >= canvas.height) {
+                aiScore++;
+                resetBall();
+            }
+
+            // Check for winning condition
+            if (playerScore === 3 || aiScore === 3) {
+                alert(playerScore === 3 ? "You win!" : "AI wins!");
+                playerScore = 0;
+                aiScore = 0;
+                gameStarted = false;
+            }
+        }
+
+        function increaseSpeed() {
+            hitCount++;
+            if (hitCount % 3 === 0) {
+                ball.speedX *= speedIncrement;
+                ball.speedY *= speedIncrement;
+            }
+        }
+
+        function drawImage(x, y, width, height, image) {
+            ctx.drawImage(image, x, y, width, height);
+        }
+
+        function drawBall(x, y, size, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw paddles
+            drawImage(playerPaddle.x, playerPaddle.y, playerPaddle.width, playerPaddle.height, playerPaddle.image);
+            drawImage(aiPaddle.x, aiPaddle.y, aiPaddle.width, aiPaddle.height, aiPaddle.image);
+
+            // Draw ball
+            drawBall(ball.x, ball.y, ball.size, ball.color);
+
+            // Draw scores
+            ctx.font = '30px Arial';
+            ctx.fillText(playerScore, canvas.width / 4, 50);
+            ctx.fillText(aiScore, 3 * canvas.width / 4, 50);
+        }
+
+        function gameLoop() {
+            if (gameStarted) {
+                update();
+                draw();
+                requestAnimationFrame(gameLoop);
+            }
+        }
+    </script>
+</body>
+</html>
