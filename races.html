@@ -62,10 +62,28 @@
             font-size: 35px;
             border-radius: 5%;
         }
+
+        .victory {
+            text-align: center;
+            background-color: black;
+            color: white;
+            display: none;
+        }
+
+        .defeat {
+            text-align: center;
+            background-color: black;
+            color: white;
+            display: none;
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
+        <p class="victory">Love! Well done, Sophie Usain Handford!<br>I LOVE YOU<br>🏆</p>
+        <p class="defeat">And the winner is...<br>Simon of course<br>Keep practicing you can do it love!</is></p>
+
         <img src="src/runner1.png" id="player1" class="player">
         <img src="src/runner2.png" id="player2" class="player">
     </div>
@@ -121,12 +139,10 @@
         function checkWinner() {
             const containerHeight = document.querySelector('.container').offsetHeight;
             if (player1Position >= containerHeight - 50) {
-                alert('Love! Sophie Usain Handford! I LOVE YOU');
-                resetGame();
+                document.getElementsByClassName('victory')[0].style.display = 'block'
             }
             if (player2Position >= containerHeight - 50) {
-                alert('Next time love, I know you can');
-                resetGame();
+                document.getElementsByClassName('defeat')[0].style.display = 'block'
             }
         }
 
