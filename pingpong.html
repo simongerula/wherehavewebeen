@@ -38,6 +38,13 @@
             cursor: pointer;
             margin-top: 20px;
         }
+        #info {
+            font-size: 1em;
+            margin-top: 20px;
+            text-align: center;
+            color: white;
+            font-family: 'Roboto Mono', monospace;
+        }
     </style>
 </head>
 <body>
@@ -45,6 +52,7 @@
         <canvas id="pongCanvas"></canvas>
     </div>
     <button id="startButton">Start Game</button>
+    <div id="info">Back to the main page <a style="text-decoration:none" href="/wherehavewebeen/">🗺️</a></div>
     <script>
         const canvas = document.getElementById('pongCanvas');
         const ctx = canvas.getContext('2d');
