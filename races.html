@@ -14,6 +14,7 @@
             height: 100vh;
             background-image: url("src/racesbg.png");
             background-size: auto;
+            background-repeat: no-repeat;
             font-family: Arial, sans-serif;
             color: #fff;
         }
@@ -29,12 +30,12 @@
             width: 150px;
         }
         #player1 {
-            left: 15%;
+            left: 5%;
         }
         #player2 {
-            right: 15%;
+            right: 5%;
         }
-        button {
+        /* button {
             position: fixed;
             bottom: 20px;
             left: 50%;
@@ -42,20 +43,59 @@
             padding: 20px 20px;
             font-size: 35px;
             border-radius: 5%;
+        } */
+
+        #runButtonL {
+            position: fixed;
+            bottom: 20px;
+            left: 20%;
+            padding: 20px 20px;
+            font-size: 35px;
+            border-radius: 5%;
         }
+        
+        #runButtonR {
+            position: fixed;
+            bottom: 20px;
+            right: 20%;
+            padding: 20px 20px;
+            font-size: 35px;
+            border-radius: 5%;
+        }
+
+        .victory {
+            text-align: center;
+            background-color: black;
+            color: white;
+            display: none;
+        }
+
+        .defeat {
+            text-align: center;
+            background-color: black;
+            color: white;
+            display: none;
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
-        <img src="src/pingpong1.png" id="player1" class="player">
-        <img src="src/pingpong2.png" id="player2" class="player">
+        <p class="victory">Love! Well done, Sophie Usain Handford!<br>I LOVE YOU<br>🏆</p>
+        <p class="defeat">And the winner is...<br>Simon of course<br>Keep practicing you can do it love!</is></p>
+
+        <img src="src/runner1.png" id="player1" class="player">
+        <img src="src/runner2.png" id="player2" class="player">
     </div>
-    <button id="runButton">Run Love!</button>
+    <button id="runButtonL" class="runButton">👣</button>
+    <button id="runButtonR" class="runButton">👣</button>
+
 
     <script>
         const player1 = document.getElementById('player1');
         const player2 = document.getElementById('player2');
-        const runButton = document.getElementById('runButton');
+        const runButtonL = document.getElementById('runButtonL');
+        const runButtonR = document.getElementById('runButtonR');
         
         let player1Position = 0;
         let player2Position = 0;
@@ -65,7 +105,15 @@
 
         let isFirstRun = true;
 
-        runButton.addEventListener('click', () => {
+        runButtonL.addEventListener('click', () => {
+            movePlayer1();
+            if (isFirstRun) {
+                isFirstRun = false;
+                moveAI(); // Start AI movement after player 1 starts moving
+            }
+        });
+
+        runButtonR.addEventListener('click', () => {
             movePlayer1();
             if (isFirstRun) {
                 isFirstRun = false;
@@ -84,19 +132,17 @@
             player2.style.bottom = `${player2Position}px`;
             checkWinner();
             if (player2Position < document.querySelector('.container').offsetHeight - 50) {
-                setTimeout(moveAI, 108); // Continue moving AI
+                setTimeout(moveAI, 109); // Continue moving AI
             }
         }
 
         function checkWinner() {
             const containerHeight = document.querySelector('.container').offsetHeight;
             if (player1Position >= containerHeight - 50) {
-                alert('Love! Sophie Usain Handford! I LOVE YOU');
-                resetGame();
+                document.getElementsByClassName('victory')[0].style.display = 'block'
             }
             if (player2Position >= containerHeight - 50) {
-                alert('Next time love, I know you can');
-                resetGame();
+                document.getElementsByClassName('defeat')[0].style.display = 'block'
             }
         }
 
