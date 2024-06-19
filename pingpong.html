@@ -45,6 +45,12 @@
             color: white;
             font-family: 'Roboto Mono', monospace; 
         }
+        .victory {
+            display: none;
+        }
+        .defeat {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -52,6 +58,8 @@
         <canvas id="pongCanvas"></canvas>
     </div>
     <button id="startButton">Start Game</button>
+    <div id="info" class="victory">Well done LOVE! You win (My heart forever) 🏆</div>
+    <div id="info" class="defeat">Nice try love, I know you can. One more? 💪🏼</div>
     <div id="info">Back to the main page <a style="text-decoration:none" href="/wherehavewebeen/">🗺️</a></div>
     <script>
         const canvas = document.getElementById('pongCanvas');
@@ -109,7 +117,12 @@
             color: '#fff'
         };
 
+        const victory = document.getElementsByClassName('victory')[0]
+        const defeat = document.getElementsByClassName('defeat')[0]
+
         function startGame() {
+            victory.style.display = 'none'
+            defeat.style.display = 'none'
             gameStarted = true;
             playerScore = 0;
             aiScore = 0;
@@ -117,6 +130,7 @@
             resetBall();
             gameLoop();
         }
+        
 
         startButton.addEventListener('click', startGame);
 
@@ -184,7 +198,7 @@
 
             // Check for winning condition
             if (playerScore === 3 || aiScore === 3) {
-                alert(playerScore === 3 ? "Well done my love! You Win 🏆" : "Sorry love, keep trying! You can do it!");
+                playerScore === 3 ? victory.style.display = 'block' : defeat.style.display = 'block';
                 playerScore = 0;
                 aiScore = 0;
                 gameStarted = false;

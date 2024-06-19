@@ -14,6 +14,7 @@
             height: 100vh;
             background-image: url("src/racesbg.png");
             background-size: auto;
+            background-repeat: no-repeat;
             font-family: Arial, sans-serif;
             color: #fff;
         }
@@ -29,16 +30,34 @@
             width: 150px;
         }
         #player1 {
-            left: 15%;
+            left: 5%;
         }
         #player2 {
-            right: 15%;
+            right: 5%;
         }
-        button {
+        /* button {
             position: fixed;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
+            padding: 20px 20px;
+            font-size: 35px;
+            border-radius: 5%;
+        } */
+
+        #runButtonL {
+            position: fixed;
+            bottom: 20px;
+            left: 20%;
+            padding: 20px 20px;
+            font-size: 35px;
+            border-radius: 5%;
+        }
+        
+        #runButtonR {
+            position: fixed;
+            bottom: 20px;
+            right: 20%;
             padding: 20px 20px;
             font-size: 35px;
             border-radius: 5%;
@@ -47,15 +66,18 @@
 </head>
 <body>
     <div class="container">
-        <img src="src/pingpong1.png" id="player1" class="player">
-        <img src="src/pingpong2.png" id="player2" class="player">
+        <img src="src/runner1.png" id="player1" class="player">
+        <img src="src/runner2.png" id="player2" class="player">
     </div>
-    <button id="runButton">Run Love!</button>
+    <button id="runButtonL" class="runButton">👣</button>
+    <button id="runButtonR" class="runButton">👣</button>
+
 
     <script>
         const player1 = document.getElementById('player1');
         const player2 = document.getElementById('player2');
-        const runButton = document.getElementById('runButton');
+        const runButtonL = document.getElementById('runButtonL');
+        const runButtonR = document.getElementById('runButtonR');
         
         let player1Position = 0;
         let player2Position = 0;
@@ -65,7 +87,15 @@
 
         let isFirstRun = true;
 
-        runButton.addEventListener('click', () => {
+        runButtonL.addEventListener('click', () => {
+            movePlayer1();
+            if (isFirstRun) {
+                isFirstRun = false;
+                moveAI(); // Start AI movement after player 1 starts moving
+            }
+        });
+
+        runButtonR.addEventListener('click', () => {
             movePlayer1();
             if (isFirstRun) {
                 isFirstRun = false;
@@ -84,7 +114,7 @@
             player2.style.bottom = `${player2Position}px`;
             checkWinner();
             if (player2Position < document.querySelector('.container').offsetHeight - 50) {
-                setTimeout(moveAI, 108); // Continue moving AI
+                setTimeout(moveAI, 109); // Continue moving AI
             }
         }
 
