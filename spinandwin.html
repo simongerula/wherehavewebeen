@@ -87,7 +87,7 @@
             background-color: #444;
         }
 
-        #result, #result1 {
+        #result, #result1, #result2 {
             margin-top: 20px;
             font-size: 20px;
         }
@@ -133,6 +133,8 @@
         <button id="spinButton">SPIN</button>
         <div id="result"></div>
         <div id="result1"></div>
+        <div id="result2"></div>
+
 
         <hr>
         <p class="footer">I love you forever <a href="https://open.spotify.com/track/6BEP2k75mE8u8gHdvxV3mn?si=34b3a4493d944e6e">❤️</a></p>
@@ -156,7 +158,8 @@
             setTimeout(() => {
                 confetti();
                 document.getElementById('result').textContent = `CONGRATS MY LOVE!`;
-                document.getElementById('result1').textContent = `You are the best partner in the WORLD!`;
+                document.getElementById('result1').textContent = `A lifetime of Good Mornings`;
+                document.getElementById('result2').textContent = `and Good Nights ❤️`;
             }, 4000); // 4 seconds to match the CSS transition duration
         });
 
