@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What's love?</title>
+    <link href="https://fonts.googleapis.com/css2?family=Handlee&display=swap" rel="stylesheet">
+    <link href="css/memories.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/worldle.css">
+    <style>
+        .container {
+            text-align: center;
+            margin: 20px;
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 177.77%; /* Adjusted for a 9:16 aspect ratio (portrait mode) */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #000;
+        }
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        #replacementImage {
+            display: none;
+            max-width: 100%;
+        }
+        #theImage{
+            display: none;
+        }
+        #sorry {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p class="memory">What is life?</p>
+        <div id="theVideoContainer" class="video-container">
+            <video id="theVideo">
+                <source src="src/whatslife.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <p id="instructions">Tap the screen to start love</p>
+        <img id="theImage" src="src/notsure.png" alt="">
+        <img id="replacementImage" src="src/notsure.png" alt="">
+        <p id="sorry">Sorry the abrupt ending hehe.<br>Ps: I think I know for what I live and that's your smile</p>
+        <hr style="width: 100%;">
+        <p class="footer">I love you forever <a style="text-decoration:none" href="https://open.spotify.com/track/6BEP2k75mE8u8gHdvxV3mn?si=34b3a4493d944e6e">❤️</a></p>
+        <p class="footer">Counting the days to see you <a style="text-decoration:none" href="/wherehavewebeen/countdown.html">🗓️</a></p>
+        <p class="footer">Back to the main page <a style="text-decoration:none" href="/wherehavewebeen/">🗺️</a></p>
+    </div>
+    <script>
+        document.getElementById('theVideo').addEventListener('click', ()=>{
+            document.getElementById('theVideo').play()
+            document.getElementById('instructions').style.display = 'none';
+        })
+        var video = document.getElementById('theVideo');
+        var videoContainer = document.getElementById('theVideoContainer');
+        var image = document.getElementById('theImage');
+        video.addEventListener('ended', function() {
+            videoContainer.style.display = 'none';
+            image.style.display = 'block';
+            document.getElementById('sorry').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
