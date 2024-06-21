@@ -43,15 +43,19 @@
     <div class="container">
         <p class="memory">What is life?</p>
         <div id="theVideoContainer" class="video-container">
-            <video id="theVideo">
+            <video muted id="theVideo">
                 <source src="src/whatslife.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
         </div>
-        <p id="instructions">Tap the screen to start love</p>
+        <audio style="display: none;" id="myAudio">
+            <source src="src/stealtheshow.mp3" type="audio/mp3">
+            Your browser does not support the audio element.
+        </audio>
+        <p id="instructions">Hi my princess, what's inside my mind?<br>Tap the screen love</p>
         <img id="theImage" src="src/notsure.png" alt="">
         <img id="replacementImage" src="src/notsure.png" alt="">
-        <p id="sorry">Sorry the abrupt ending hehe.<br>Ps: I think I know for what I live and that's your smile</p>
+        <p id="sorry">Ps: I think I know for what I live and that's your smile</p>
         <hr style="width: 100%;">
         <p class="footer">I love you forever <a style="text-decoration:none" href="https://open.spotify.com/track/6BEP2k75mE8u8gHdvxV3mn?si=34b3a4493d944e6e">❤️</a></p>
         <p class="footer">Counting the days to see you <a style="text-decoration:none" href="/wherehavewebeen/countdown.html">🗓️</a></p>
@@ -60,6 +64,7 @@
     <script>
         document.getElementById('theVideo').addEventListener('click', ()=>{
             document.getElementById('theVideo').play()
+            document.getElementById('myAudio').play()
             document.getElementById('instructions').style.display = 'none';
         })
         var video = document.getElementById('theVideo');
