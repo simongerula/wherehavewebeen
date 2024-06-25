@@ -18,7 +18,6 @@
     animation: breathing 2s ease-in-out infinite;
 }
 
-
 body {
     display: flex;
     flex-direction: column;
