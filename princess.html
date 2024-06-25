@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Girlfriend Dress Up Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        
+        .outfit {
+            margin-top: 20px;
+        }
+        
+        .controls {
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Girlfriend Dress Up Game</h1>
+    <div class="outfit">
+        <img id="girlfriendImage" src="girlfriend.png" alt="Girlfriend">
+    </div>
+    <div class="controls">
+        <button onclick="changeOutfit('left')">Left</button>
+        <button onclick="changeOutfit('right')">Right</button>
+    </div>
+
+    <script>
+        let currentOutfitIndex = 1; // Initial outfit index
+
+        const outfits = [
+            'outfit1.png', // Path to your outfit PNGs
+            'outfit2.png',
+            'outfit3.png',
+            // Add more outfits as needed
+        ];
+
+        function changeOutfit(direction) {
+            if (direction === 'left') {
+                currentOutfitIndex = (currentOutfitIndex - 1 + outfits.length) % outfits.length;
+            } else if (direction === 'right') {
+                currentOutfitIndex = (currentOutfitIndex + 1) % outfits.length;
+            }
+
+            const outfitImage = outfits[currentOutfitIndex];
+            document.getElementById('girlfriendImage').src = outfitImage;
+        }
+    </script>
+</body>
+</html>
