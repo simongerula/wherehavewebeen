@@ -13,9 +13,8 @@
             <input type="checkbox" id="menu-toggle">
             <label for="menu-toggle" class="menu-icon">🏡</label>
             <div class="menu-content">
-                <p>Sorry love, reduced menu ❤️</p>
-                <!-- <a href="/wherehavewebeen/countdown.html">Counting the days 🗓️</a> -->
-                <!-- <a href="/wherehavewebeen/worldle.html">You are my WORLDle 🌎</a> -->
+                <a href="/wherehavewebeen/countdown.html">Counting the days 🗓️</a>
+                <a href="/wherehavewebeen/worldle.html">You are my WORLDle 🌎</a>
                 <a href="/wherehavewebeen/bomb.html">Something is brewing ☢️</a>
                 <a href="/wherehavewebeen/races.html">Want to race love? 🏃🏼🏃🏼‍♀️</a>
                 <a href="/wherehavewebeen/pingpong.html">Let's take a break 🏓</a>
@@ -24,18 +23,17 @@
                 <a href="/wherehavewebeen/oursong.html">Our song 🎶</a>
                 <a href="/wherehavewebeen/ourlove.html">Out Love 🎬</a>
                 <a href="/wherehavewebeen/spinandwin.html">Spin & Win! 🎰</a>
+                <a href="/wherehavewebeen/spinandwin.html">You are my princess 👸🏼</a>
                 <a href="/wherehavewebeen/src/idsophie.png" download="">Best girlfriend License 🪪💖</a>
             </div>
         </div>
         <hr>
 
-        <p>Sorry love, out of the office<br>Will be back soon! Now enjoy!<br>Coming for you!!!</p>
-        <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExYWYxZ3hoeTdhYnJubDFjb290dndvcGdva2N5MDlkeWtnYnF1eWo0OCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/B36PaeuCgP6tuVRwfI/giphy.webp" alt="">
-        <!-- <div id="title">Where Have We Been?</div> -->
-        <!-- <img id="photo" alt="Photo"> -->
-        <!-- <div id="instructions">Let's see if you remember where this photo was taken, my love. <br> Pin your guess on the map below.</div> -->
-        <!-- <div id="map"></div> -->
-        <!-- <div id="closest-guess"></div> -->
+        <div id="title">Where Have We Been?</div>
+        <img id="photo" alt="Photo">
+        <div id="instructions">Let's see if you remember where this photo was taken, my love. <br> Pin your guess on the map below.</div>
+        <div id="map"></div>
+        <div id="closest-guess"></div>
 
         <hr>
         <p class="footer">I love you forever <a style="text-decoration:none" href="/wherehavewebeen/whatslife.html">❤️</a></p>
@@ -45,8 +43,7 @@
     <div id="myModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <p>Hi my princess,<br>As soon we are going to be in Disney 🏰<br>I want you to see this little piece of my favorite movie</p>
-            <video style="max-width: 100%;" controls src="src/disney.mp4"></video>
+            <video id="hiCutie" style="max-width: 100%;" playsinline src="src/hicutiepie.mp4"></video>
             <!-- <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMndrbGRpZzJycHp5NnNnZmJlZWdzazJ4MHhveTR6ZmU1aG1qbHJnMSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aakxWTRwtjLqoU7rjE/giphy.webp" alt=""></a> -->
         </div>
             <!-- SCRATCH AND WIN -->
@@ -72,5 +69,10 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="js/locations.js"></script>
     <script src="js/index.js"></script>
+    <script>
+        document.getElementById('hiCutie').addEventListener('click', ()=>{
+            document.getElementById('hiCutie').play()
+        })
+    </script>
 </body>
 </html>
