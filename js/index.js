@@ -101,7 +101,9 @@ function createShareLink(distanceDisplay) {
 }
 
 var modal = document.getElementById("myModal");
-var span = document.getElementsByClassName("close")[0];
+var theOtherModal = document.getElementById('theOtherModal')
+var span = document.getElementsByClassName("closeOne")[0];
+var spanTwo = document.getElementsByClassName("closeTwo")[0];
 const theBody = document.querySelector('body')
 
 window.onload = function() {
@@ -112,6 +114,11 @@ window.onload = function() {
 span.onclick = function() {
     modal.style.display = "none";
     theBody.style.overflow = "auto"
+    theOtherModal.style.display = 'block'
+}
+
+spanTwo.onclick = function() {
+    theOtherModal.style.display = 'none'
 }
 
 window.onclick = function(event) {

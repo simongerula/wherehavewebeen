@@ -82,7 +82,7 @@ input#password {
     margin: 0 auto;
 }
 
-.close {
+.closeOne , .closeTwo {
     color: #aaaaaa;
     float: right;
     font-size: 28px;
