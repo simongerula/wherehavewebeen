@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Coloring Game</title>
+  <title>Best painting of my life</title>
   <style>
     body {
     font-family: Arial, sans-serif;
@@ -36,8 +36,8 @@
     }
 
     #result {
-      margin-top: 20px;
       font-weight: bold;
+      margin: 10px;
     }
 
     @media (min-width: 600px) {
@@ -81,7 +81,8 @@
 <body>
   <div id="game-container">
     <p>Love, How's your photographic memory?</p>
-    <p>I was trying to do our art again,<br>But I've forgotten the color of some of the drawings, can you help me?<br>Thank you, you are amazing.</p>
+    <p>I was trying to reconstruct our art,<br>But I've forgotten the color of some of the drawings.<br><br>Can you help me re-painting<br> the green (color chosen by you) ones?<br>Thank you, you are amazing.</p>
+    <div id="result"></div>
     <div id="color-buttons">
       <button id="orange" class="color-button" style="background-color: #a13b23;"></button>
       <button id="blue" class="color-button" style="background-color: #1b345f;"></button>
@@ -281,7 +282,6 @@
       </svg>
     </div>
     <button id="check-button">Check</button>
-    <div id="result"></div>
   </div>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
