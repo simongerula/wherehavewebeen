@@ -7,7 +7,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 var todaysIndex = getTodaysIndex();
 var targetLocation = locations[todaysIndex];
-document.getElementById('photo').src = `./src/imageGuess${todaysIndex}.JPG`;
+document.getElementById('photo').src = `./src/imageGuess${todaysIndex}.jpg`;
 
 // Retrieve closest guess from local storage
 var closestGuess = localStorage.getItem('closestGuess');
