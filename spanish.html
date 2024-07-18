@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matching Game</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #ffffff;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo {
+            width: 150px; /* Adjust size as needed */
+            height: 150px; /* Adjust size as needed */
+            margin-bottom: 10px;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 600px;
+        }
+        .cards {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .card {
+            width: 80px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #333;
+            cursor: pointer;
+            background-color: gray;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+        .card:hover {
+            transform: scale(1.1);
+        }
+        .card.selected {
+            background-color: lightblue;
+        }
+        .card.matched {
+            background-color: green;
+            color: white;
+            pointer-events: none;
+        }
+        .card.hidden {
+            background-color: #333;
+            color: #333;
+        }
+        .card.nomatch {
+            background-color: red;
+        }
+        .message {
+            font-size: 18px;
+            color: red;
+            font-weight: bold;
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .confetti {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 10px;
+            height: 10px;
+            background: red;
+            opacity: 0;
+            animation: confetti 4s ease-in-out infinite;
+        }
+        @keyframes confetti {
+            0% {
+                opacity: 1;
+                transform: translateY(0) rotate(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(600px) rotate(720deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="src/logo.png" alt="Logo" class="logo">
+        <div>Learn Spanish</div>
+    </div>
+
+    <div class="container">
+        <div class="cards left-cards">
+            <div class="card" data-value="1">I</div>
+            <div class="card" data-value="2">LOVE</div>
+            <div class="card" data-value="3">YOU</div>
+            <div class="card" data-value="4">FOREVER</div>
+        </div>
+        <div class="cards right-cards">
+            <div class="card hidden" data-value="1">TE</div>
+            <div class="card hidden" data-value="2">AMO</div>
+            <div class="card hidden" data-value="3">PARA</div>
+            <div class="card hidden" data-value="4">SIEMPRE</div>
+        </div>
+    </div>
+    <div class="message">Sophie Handford,<br>I love you forever and ever.<br><br>I'm keeping you forever.</div>
+    <br><br><br><br>
+    <hr style="width: 90%;">
+    <br>
+    <div id="info">I love you forever ❤️</div>
+    <br>
+    <div id="info">Back to the main page <a style="text-decoration:none" href="/wherehavewebeen/">🗺️</a></div>
+    <script>
+        let selectedLeftCard = null;
+        let matchCount = 0;
+
+        document.querySelectorAll('.left-cards .card').forEach(card => {
+            card.addEventListener('click', () => {
+                if (selectedLeftCard) {
+                    selectedLeftCard.classList.remove('selected');
+                }
+                selectedLeftCard = card;
+                selectedLeftCard.classList.add('selected');
+            });
+        });
+
+        document.querySelectorAll('.right-cards .card').forEach(card => {
+            card.addEventListener('click', () => {
+                if (!selectedLeftCard) return;
+
+                if (card.dataset.value === selectedLeftCard.dataset.value) {
+                    card.classList.remove('hidden');
+                    card.classList.add('matched');
+                    selectedLeftCard.classList.add('matched');
+                    selectedLeftCard = null;
+                    matchCount++;
+
+                    if (matchCount === 4) {
+                        document.querySelector('.message').style.display = 'block';
+                        for (let i = 0; i < 100; i++) {
+                            createConfetti();
+                        }
+                    }
+                } else {
+                    card.classList.remove('hidden');
+                    card.classList.add('nomatch');
+                    setTimeout(() => {
+                        card.classList.remove('nomatch');
+                        card.classList.add('hidden');
+                    }, 1000);
+                }
+            });
+        });
+
+        function createConfetti() {
+            const confetti = document.createElement('div');
+            confetti.classList.add('confetti');
+            confetti.style.left = Math.random() * window.innerWidth + 'px';
+            confetti.style.backgroundColor = getRandomColor();
+            confetti.style.animationDelay = Math.random() * 4 + 's';
+            document.body.appendChild(confetti);
+            setTimeout(() => {
+                document.body.removeChild(confetti);
+            }, 4000);
+        }
+
+        function getRandomColor() {
+            const colors = ['#ff0a54', '#ff477e', '#ff7096', '#ff85a1', '#fbb1bd'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+    </script>
+</body>
+</html>
